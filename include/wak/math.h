@@ -81,7 +81,7 @@ constexpr inline T Lerp(const T& start, const T& end, Float t)
 template <typename T>
 constexpr inline T Slerp(const T& start, const T& end, Float t)
 {
-    Float dot = Clamp(Dot(start, end), Float(-1), FLoat(1));
+    Float dot = Clamp(Dot(start, end), Float(-1), Float(1));
     Float angle = std::acos(dot) * t;
 
     T rv = end - start * dot;
