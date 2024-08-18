@@ -177,9 +177,9 @@ struct Mat3
     }
 
     Mat3 GetInverse() const;
-    Mat3 Scale(Float x, Float y);
+
+    Mat3 Scale(const Vec2& v);
     Mat3 Rotate(Float z);
-    Mat3 Translate(Float x, Float y);
     Mat3 Translate(const Vec2& v);
 
     std::string ToString() const
@@ -275,9 +275,8 @@ struct Mat4
     }
 
     Mat4 GetInverse();
-    Mat4 Scale(Float x, Float y, Float z);
-    Mat4 Rotate(Float x, Float y, Float z);
-    Mat4 Translate(Float x, Float y, Float z);
+    Mat4 Scale(const Vec3& s);
+    Mat4 Rotate(const Vec3& r);
     Mat4 Translate(const Vec3& v);
 
     std::string ToString() const

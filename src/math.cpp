@@ -54,12 +54,12 @@ Mat3 Mat3::GetInverse() const
     return t;
 }
 
-Mat3 Mat3::Scale(Float x, Float y)
+Mat3 Mat3::Scale(const Vec2& s)
 {
     Mat3 t{ identity };
 
-    t.ex.x = x;
-    t.ey.y = y;
+    t.ex.x = s.x;
+    t.ey.y = s.y;
 
     return Mul(*this, t);
 }
@@ -76,16 +76,6 @@ Mat3 Mat3::Rotate(Float z)
     t.ex.y = s; t.ey.y = c;  t.ez.y = 0;
     t.ex.z = 0; t.ey.z = 0;  t.ez.z = 1;
     // clang-format on
-
-    return Mul(*this, t);
-}
-
-Mat3 Mat3::Translate(Float x, Float y)
-{
-    Mat3 t{ identity };
-
-    t.ez.x = x;
-    t.ez.y = y;
 
     return Mul(*this, t);
 }
@@ -108,25 +98,25 @@ Mat4::Mat4(const Transform& t)
     ez *= t.s.z;
 }
 
-Mat4 Mat4::Scale(Float x, Float y, Float z)
+Mat4 Mat4::Scale(const Vec3& s)
 {
     Mat4 t{ identity };
 
-    t.ex.x = x;
-    t.ey.y = y;
-    t.ez.z = z;
+    t.ex.x = s.x;
+    t.ey.y = s.y;
+    t.ez.z = s.z;
 
     return Mul(*this, t);
 }
 
-Mat4 Mat4::Rotate(Float x, Float y, Float z)
+Mat4 Mat4::Rotate(const Vec3& r)
 {
-    Float sinX = std::sin(x);
-    Float cosX = std::cos(x);
-    Float sinY = std::sin(y);
-    Float cosY = std::cos(y);
-    Float sinZ = std::sin(z);
-    Float cosZ = std::cos(z);
+    Float sinX = std::sin(r.x);
+    Float cosX = std::cos(r.x);
+    Float sinY = std::sin(r.y);
+    Float cosY = std::cos(r.y);
+    Float sinZ = std::sin(r.z);
+    Float cosZ = std::cos(r.z);
 
     Mat4 t;
 
@@ -149,17 +139,6 @@ Mat4 Mat4::Rotate(Float x, Float y, Float z)
     t.ew.y = 0;
     t.ew.z = 0;
     t.ew.w = 1;
-
-    return Mul(*this, t);
-}
-
-Mat4 Mat4::Translate(Float x, Float y, Float z)
-{
-    Mat4 t{ identity };
-
-    t.ew.x = x;
-    t.ew.y = y;
-    t.ew.z = z;
 
     return Mul(*this, t);
 }
