@@ -166,9 +166,31 @@ struct Quat
         return Vec3((y * w2) + x * z2, (-x * w2) + y * z2, (w * w2) - 1 + z * z2);
     }
 
-    std::string ToString() const
+    Vec3 ToEuler() const
     {
-        return std::format("{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}", x, y, z, w);
+        // Roll (x-axis)
+        Float sinr_cosp = 2 * (w * x + y * z);
+        Float cosr_cosp = 1 - 2 * (x * x + y * y);
+        Float roll = std::atan2(sinr_cosp, cosr_cosp);
+
+        // Pitch (y-axis)
+        Float sinp = 2 * (w * y - z * x);
+        Float pitch;
+        if (std::abs(sinp) >= 1)
+        {
+            pitch = std::copysign(pi / 2, sinp); // use 90 degrees if out of range
+        }
+        else
+        {
+            pitch = std::asin(sinp);
+        }
+
+        // Yaw (z-axis)
+        Float siny_cosp = 2 * (w * z + x * y);
+        Float cosy_cosp = 1 - 2 * (y * y + z * z);
+        Float yaw = std::atan2(siny_cosp, cosy_cosp);
+
+        return Vec3{ roll, pitch, yaw };
     }
 
     static inline Quat FromEuler(Float x, Float y, Float z)
@@ -187,6 +209,11 @@ struct Quat
         q.z = cr * cp * sy - sr * sp * cy;
 
         return q;
+    }
+
+    std::string ToString() const
+    {
+        return std::format("{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}", x, y, z, w);
     }
 
     Float x, y, z, w;
