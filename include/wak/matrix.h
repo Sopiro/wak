@@ -279,6 +279,9 @@ struct Mat4
     Mat4 Rotate(const Vec3& r);
     Mat4 Translate(const Vec3& v);
 
+    static Mat4 Orth(Float left, Float right, Float bottom, Float top, Float zNear, Float zFar);
+    static Mat4 Perspective(Float fovY, Float aspect, Float zNear, Float zFar);
+
     std::string ToString() const
     {
         return std::format(
@@ -396,19 +399,41 @@ inline Mat4 MulT(const Mat4& a, const Mat4& b)
     return Mat4(c1, c2, c3, c4);
 }
 
-inline Mat4 Orth(Float left, Float right, Float bottom, Float top, Float zNear, Float zFar)
+inline Mat4 Mat4::Orth(Float left, Float right, Float bottom, Float top, Float z_near, Float z_far)
 {
     Mat4 t{ identity };
 
     // Scale
     t.ex.x = 2 / (right - left);
     t.ey.y = 2 / (top - bottom);
-    t.ez.z = 2 / (zFar - zNear);
+    t.ez.z = 2 / (z_far - z_near);
 
     // Translation
     t.ew.x = -(right + left) / (right - left);
     t.ew.y = -(top + bottom) / (top - bottom);
-    t.ew.z = -(zFar + zNear) / (zFar - zNear);
+    t.ew.z = -(z_far + z_near) / (z_far - z_near);
+
+    return t;
+}
+
+inline Mat4 Mat4::Perspective(Float vertical_fov, Float aspect_ratio, Float z_near, Float z_far)
+{
+    Mat4 t{ identity };
+
+    // Calculate the scale factors based on the field of view and aspect ratio
+    Float tan_half_fov = std::tan(vertical_fov / 2);
+
+    // Scale
+    t.ex.x = 1 / (aspect_ratio * tan_half_fov);    // Scale in x-axis
+    t.ey.y = 1 / tan_half_fov;                     // Scale in y-axis
+    t.ez.z = -(z_far + z_near) / (z_far - z_near); // Scale in z-axis
+    t.ez.w = -1;                                   // Needed for perspective division
+
+    // Translation (for z-axis)
+    t.ew.z = -(2 * z_far * z_near) / (z_far - z_near);
+
+    // No translation in x or y (remain 0)
+    t.ew.w = 0;
 
     return t;
 }
