@@ -20,16 +20,24 @@ struct Mat2
 
     Mat2() = default;
 
-    Mat2(Identity)
+    constexpr Mat2(Identity)
         : Mat2(1)
     {
     }
 
-    explicit Mat2(Float v)
+    constexpr explicit Mat2(Float v)
     {
         // clang-format off
-        ex.x = v;    ey.x = 0;
-        ex.y = 0;    ey.y = v;
+        ex.x = v;   ey.x = 0;
+        ex.y = 0;   ey.y = v;
+        // clang-format on
+    }
+
+    constexpr explicit Mat2(const Vec2& v)
+    {
+        // clang-format off
+        ex.x = v.x; ey.x = 0;
+        ex.y = 0;   ey.y = v.y;
         // clang-format on
     }
 
@@ -112,17 +120,26 @@ struct Mat3
 
     Mat3() = default;
 
-    Mat3(Identity)
+    constexpr Mat3(Identity)
         : Mat3(1)
     {
     }
 
-    explicit Mat3(Float v)
+    constexpr explicit Mat3(Float v)
     {
         // clang-format off
-        ex.x = v;    ey.x = 0;    ez.x = 0;
-        ex.y = 0;    ey.y = v;    ez.y = 0;
-        ex.z = 0;    ey.z = 0;    ez.z = v;
+        ex.x = v;   ey.x = 0;   ez.x = 0;
+        ex.y = 0;   ey.y = v;   ez.y = 0;
+        ex.z = 0;   ey.z = 0;   ez.z = v;
+        // clang-format on
+    }
+
+    constexpr explicit Mat3(const Vec3& v)
+    {
+        // clang-format off
+        ex.x = v.x; ey.x = 0;   ez.x = 0;
+        ex.y = 0;   ey.y = v.y; ez.y = 0;
+        ex.z = 0;   ey.z = 0;   ez.z = v.z;
         // clang-format on
     }
 
@@ -197,18 +214,28 @@ struct Mat4
 
     Mat4() = default;
 
-    Mat4(Identity)
+    constexpr Mat4(Identity)
         : Mat4(1)
     {
     }
 
-    explicit Mat4(Float v)
+    constexpr explicit Mat4(Float v)
     {
         // clang-format off
         ex.x = v;    ey.x = 0;    ez.x = 0;    ew.x = 0;
         ex.y = 0;    ey.y = v;    ez.y = 0;    ew.y = 0;
         ex.z = 0;    ey.z = 0;    ez.z = v;    ew.z = 0;
         ex.w = 0;    ey.w = 0;    ez.w = 0;    ew.w = v;
+        // clang-format on
+    }
+
+    constexpr explicit Mat4(const Vec4& v)
+    {
+        // clang-format off
+        ex.x = v.x; ey.x = 0;   ez.x = 0;   ew.x = 0;
+        ex.y = 0;   ey.y = v.y; ez.y = 0;   ew.y = 0;
+        ex.z = 0;   ey.z = 0;   ez.z = v.z; ew.z = 0;
+        ex.w = 0;   ey.w = 0;   ez.w = 0;   ew.w = v.w;
         // clang-format on
     }
 
@@ -420,19 +447,18 @@ inline Mat4 Mat4::Perspective(Float vertical_fov, Float aspect_ratio, Float z_ne
 {
     Mat4 t{ identity };
 
-    // Calculate the scale factors based on the field of view and aspect ratio
     Float tan_half_fov = std::tan(vertical_fov / 2);
 
     // Scale
-    t.ex.x = 1 / (aspect_ratio * tan_half_fov);    // Scale in x-axis
-    t.ey.y = 1 / tan_half_fov;                     // Scale in y-axis
-    t.ez.z = -(z_far + z_near) / (z_far - z_near); // Scale in z-axis
-    t.ez.w = -1;                                   // Needed for perspective division
+    t.ex.x = 1 / (aspect_ratio * tan_half_fov);
+    t.ey.y = 1 / tan_half_fov;
+    t.ez.z = -(z_far + z_near) / (z_far - z_near);
+    t.ez.w = -1; // Needed for perspective division
 
     // Translation (for z-axis)
     t.ew.z = -(2 * z_far * z_near) / (z_far - z_near);
 
-    // No translation in x or y (remain 0)
+    // No translation in x or y
     t.ew.w = 0;
 
     return t;
