@@ -53,14 +53,14 @@ constexpr inline T Clamp(T v, U l, V r)
 }
 
 template <template <typename> class V, typename T>
-constexpr inline V<T> Normalize(const V<T>& v)
+inline V<T> Normalize(const V<T>& v)
 {
     T inv_length = T(1) / Length(v);
     return v * inv_length;
 }
 
 template <template <typename> class V, typename T>
-constexpr inline V<T> NormalizeSafe(const V<T>& v)
+inline V<T> NormalizeSafe(const V<T>& v)
 {
     T length = v.Length();
     if (length < std::numeric_limits<T>::epsilon())
@@ -79,7 +79,7 @@ constexpr inline T Lerp(const T& start, const T& end, Float t)
 }
 
 template <typename T>
-constexpr inline T Slerp(const T& start, const T& end, Float t)
+inline T Slerp(const T& start, const T& end, Float t)
 {
     Float dot = Clamp(Dot(start, end), Float(-1), Float(1));
     Float angle = std::acos(dot) * t;

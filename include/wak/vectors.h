@@ -35,7 +35,7 @@ struct Vector2 : public Tuple2<Vector2, T>
     using Tuple2<Vector2, T>::x;
     using Tuple2<Vector2, T>::y;
 
-    Vector2() = default;
+    constexpr Vector2() = default;
 
     constexpr explicit Vector2(T v)
         : Tuple2<Vector2, T>(v, v)
@@ -78,7 +78,7 @@ struct Vector2 : public Tuple2<Vector2, T>
 };
 
 template <typename T>
-const inline Vector2<T> Vector2<T>::zero = Vector2<T>(T(0), T(0));
+const inline Vector2<T> Vector2<T>::zero{ T(0), T(0) };
 
 template <typename T>
 struct Vector3 : public Tuple3<Vector3, T>
@@ -87,7 +87,7 @@ struct Vector3 : public Tuple3<Vector3, T>
     using Tuple3<Vector3, T>::y;
     using Tuple3<Vector3, T>::z;
 
-    Vector3() = default;
+    constexpr Vector3() = default;
 
     constexpr explicit Vector3(T v)
         : Tuple3<Vector3, T>(v, v, v)
@@ -132,7 +132,7 @@ struct Vector3 : public Tuple3<Vector3, T>
 };
 
 template <typename T>
-const inline Vector3<T> Vector3<T>::zero = Vector3<T>(T(0), T(0), T(0));
+const inline Vector3<T> Vector3<T>::zero{ T(0), T(0), T(0) };
 
 template <typename T>
 struct Vector4 : public Tuple4<Vector4, T>
@@ -142,7 +142,7 @@ struct Vector4 : public Tuple4<Vector4, T>
     using Tuple4<Vector4, T>::z;
     using Tuple4<Vector4, T>::w;
 
-    Vector4() = default;
+    constexpr Vector4() = default;
 
     constexpr explicit Vector4(T v)
         : Tuple4<Vector4, T>(v, v, v, v)
@@ -174,16 +174,6 @@ struct Vector4 : public Tuple4<Vector4, T>
         w = -w;
     }
 
-    T Length2() const
-    {
-        return x * x + y * y + z * z + w * w;
-    }
-
-    T Length() const
-    {
-        return std::sqrt(Length2());
-    }
-
     T Normalize()
     {
         T length = Length();
@@ -205,108 +195,108 @@ struct Vector4 : public Tuple4<Vector4, T>
 };
 
 template <typename T>
-const inline Vector4<T> Vector4<T>::zero = Vector4<T>(T(0), T(0), T(0), T(0));
+const inline Vector4<T> Vector4<T>::zero = { T(0), T(0), T(0), T(0) };
 
 // Vector2 inline functions begin
 
 template <typename T>
-inline Vector2<T> Min(const Vector2<T>& a, const Vector2<T>& b)
+constexpr inline Vector2<T> Min(const Vector2<T>& a, const Vector2<T>& b)
 {
     return Vector2<T>(std::min(a.x, b.x), std::min(a.y, b.y));
 }
 
 template <typename T>
-inline Vector2<T> Max(const Vector2<T>& a, const Vector2<T>& b)
+constexpr inline Vector2<T> Max(const Vector2<T>& a, const Vector2<T>& b)
 {
     return Vector2<T>(std::max(a.x, b.x), std::max(a.y, b.y));
 }
 
 template <typename T>
-inline T Dot(const Vector2<T>& a, const Vector2<T>& b)
+constexpr inline T Dot(const Vector2<T>& a, const Vector2<T>& b)
 {
     return a.x * b.x + a.y * b.y;
 }
 
 template <typename T>
-inline T Cross(const Vector2<T>& a, const Vector2<T>& b)
+constexpr inline T Cross(const Vector2<T>& a, const Vector2<T>& b)
 {
     return a.x * b.y - a.y * b.x;
 }
 
 template <typename T, typename U>
-inline Vector2<T> Cross(U s, const Vector2<T>& v)
+constexpr inline Vector2<T> Cross(U s, const Vector2<T>& v)
 {
     return Vector2<T>(-s * v.y, s * v.x);
 }
 
 template <typename T, typename U>
-inline Vector2<T> Cross(const Vector2<T>& v, U s)
+constexpr inline Vector2<T> Cross(const Vector2<T>& v, U s)
 {
     return Vector2<T>(s * v.y, -s * v.x);
 }
 
 template <typename T>
-inline Vector2<T> operator+(const Vector2<T>& a, const Vector2<T>& b)
+constexpr inline Vector2<T> operator+(const Vector2<T>& a, const Vector2<T>& b)
 {
     return Vector2<T>(a.x + b.x, a.y + b.y);
 }
 
 template <typename T>
-inline Vector2<T> operator+(const Vector2<T>& a, T b)
+constexpr inline Vector2<T> operator+(const Vector2<T>& a, T b)
 {
     return Vector2<T>(a.x + b, a.y + b);
 }
 
 template <typename T>
-inline Vector2<T> operator-(const Vector2<T>& a, const Vector2<T>& b)
+constexpr inline Vector2<T> operator-(const Vector2<T>& a, const Vector2<T>& b)
 {
     return Vector2<T>(a.x - b.x, a.y - b.y);
 }
 
 template <typename T, typename U>
-inline Vector2<T> operator-(const Vector2<T>& a, U b)
+constexpr inline Vector2<T> operator-(const Vector2<T>& a, U b)
 {
     return Vector2<T>(a.x - b, a.y - b);
 }
 
 template <typename T, typename U>
-inline Vector2<T> operator*(const Vector2<T>& v, U s)
+constexpr inline Vector2<T> operator*(const Vector2<T>& v, U s)
 {
     return Vector2<T>(v.x * s, v.y * s);
 }
 
 template <typename T, typename U>
-inline Vector2<T> operator*(U s, const Vector2<T>& v)
+constexpr inline Vector2<T> operator*(U s, const Vector2<T>& v)
 {
     return Vector2<T>(v.x * s, v.y * s);
 }
 
 template <typename T>
-inline Vector2<T> operator*(const Vector2<T>& a, const Vector2<T>& b)
+constexpr inline Vector2<T> operator*(const Vector2<T>& a, const Vector2<T>& b)
 {
     return Vector2<T>(a.x * b.x, a.y * b.y);
 }
 
 template <typename T, typename U>
-inline Vector2<T> operator/(const Vector2<T>& v, U s)
+constexpr inline Vector2<T> operator/(const Vector2<T>& v, U s)
 {
     return Vector2<T>(v.x / s, v.y / s);
 }
 
 template <typename T, typename U>
-inline Vector2<T> operator/(U s, const Vector2<T>& v)
+constexpr inline Vector2<T> operator/(U s, const Vector2<T>& v)
 {
     return Vector2<T>(s / v.x, s / v.y);
 }
 
 template <typename T>
-inline bool operator==(const Vector2<T>& a, const Vector2<T>& b)
+constexpr inline bool operator==(const Vector2<T>& a, const Vector2<T>& b)
 {
     return a.x == b.x && a.y == b.y;
 }
 
 template <typename T>
-inline bool operator!=(const Vector2<T>& a, const Vector2<T>& b)
+constexpr inline bool operator!=(const Vector2<T>& a, const Vector2<T>& b)
 {
     return a.x != b.x || a.y != b.y;
 }
@@ -318,13 +308,13 @@ constexpr inline T Length2(const Vector2<T>& v)
 }
 
 template <typename T>
-constexpr inline T Length(const Vector2<T>& v)
+inline T Length(const Vector2<T>& v)
 {
     return std::sqrt(Length2(v));
 }
 
 template <typename T>
-inline T Dist2(const Vector2<T>& a, const Vector2<T>& b)
+constexpr inline T Dist2(const Vector2<T>& a, const Vector2<T>& b)
 {
     return Length2(a - b);
 }
@@ -340,97 +330,97 @@ inline T Dist(const Vector2<T>& a, const Vector2<T>& b)
 // Vector3 inline functions begin
 
 template <typename T>
-inline Vector3<T> Min(const Vector3<T>& a, const Vector3<T>& b)
+constexpr inline Vector3<T> Min(const Vector3<T>& a, const Vector3<T>& b)
 {
     return Vector3<T>(std::min(a.x, b.x), std::min(a.y, b.y), std::min(a.z, b.z));
 }
 
 template <typename T>
-inline Vector3<T> Max(const Vector3<T>& a, const Vector3<T>& b)
+constexpr inline Vector3<T> Max(const Vector3<T>& a, const Vector3<T>& b)
 {
     return Vector3<T>(std::max(a.x, b.x), std::max(a.y, b.y), std::max(a.z, b.z));
 }
 
 template <typename T>
-inline T Dot(const Vector3<T>& a, const Vector3<T>& b)
+constexpr inline T Dot(const Vector3<T>& a, const Vector3<T>& b)
 {
     return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
 template <typename T>
-inline Vector3<T> Cross(const Vector3<T>& a, const Vector3<T>& b)
+constexpr inline Vector3<T> Cross(const Vector3<T>& a, const Vector3<T>& b)
 {
     return Vector3<T>(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
 }
 
 template <typename T>
-inline Vector3<T> operator+(const Vector3<T>& a, const Vector3<T>& b)
+constexpr inline Vector3<T> operator+(const Vector3<T>& a, const Vector3<T>& b)
 {
     return Vector3<T>(a.x + b.x, a.y + b.y, a.z + b.z);
 }
 
 template <typename T, typename U>
-inline Vector3<T> operator+(const Vector3<T>& a, U b)
+constexpr inline Vector3<T> operator+(const Vector3<T>& a, U b)
 {
     return Vector3<T>(a.x + b, a.y + b, a.z + b);
 }
 
 template <typename T>
-inline Vector3<T> operator-(const Vector3<T>& a, const Vector3<T>& b)
+constexpr inline Vector3<T> operator-(const Vector3<T>& a, const Vector3<T>& b)
 {
     return Vector3<T>(a.x - b.x, a.y - b.y, a.z - b.z);
 }
 
 template <typename T, typename U>
-inline Vector3<T> operator-(const Vector3<T>& a, U b)
+constexpr inline Vector3<T> operator-(const Vector3<T>& a, U b)
 {
     return Vector3<T>(a.x - b, a.y - b, a.z - b);
 }
 
 template <typename T, typename U>
-inline Vector3<T> operator*(const Vector3<T>& v, U s)
+constexpr inline Vector3<T> operator*(const Vector3<T>& v, U s)
 {
     return Vector3<T>(v.x * s, v.y * s, v.z * s);
 }
 
 template <typename T, typename U>
-inline Vector3<T> operator*(U s, const Vector3<T>& v)
+constexpr inline Vector3<T> operator*(U s, const Vector3<T>& v)
 {
     return Vector3<T>(v.x * s, v.y * s, v.z * s);
 }
 
 template <typename T>
-inline Vector3<T> operator*(const Vector3<T>& a, const Vector3<T>& b)
+constexpr inline Vector3<T> operator*(const Vector3<T>& a, const Vector3<T>& b)
 {
     return Vector3<T>(a.x * b.x, a.y * b.y, a.z * b.z);
 }
 
 template <typename T, typename U>
-inline Vector3<T> operator/(const Vector3<T>& v, U s)
+constexpr inline Vector3<T> operator/(const Vector3<T>& v, U s)
 {
     return Vector3<T>(v.x / s, v.y / s, v.z / s);
 }
 
 template <typename T, typename U>
-inline Vector3<T> operator/(U s, const Vector3<T>& v)
+constexpr inline Vector3<T> operator/(U s, const Vector3<T>& v)
 {
     return Vector3<T>(s / v.x, s / v.y, s / v.z);
 }
 
 template <typename T>
-inline Vector3<T> operator/(const Vector3<T>& a, const Vector3<T>& b)
+constexpr inline Vector3<T> operator/(const Vector3<T>& a, const Vector3<T>& b)
 {
     return Vector3<T>(a.x / b.x, a.y / b.y, a.z / b.z);
 }
 
 template <typename T>
-inline bool operator==(const Vector3<T>& a, const Vector3<T>& b)
+constexpr inline bool operator==(const Vector3<T>& a, const Vector3<T>& b)
 {
     return a.x == b.x && a.y == b.y && a.z == b.z;
 }
 
 template <typename T>
-inline bool operator!=(const Vector3<T>& a, const Vector3<T>& b)
+constexpr inline bool operator!=(const Vector3<T>& a, const Vector3<T>& b)
 {
     return a.x != b.x || a.y != b.y || a.z != b.z;
 }
@@ -442,13 +432,13 @@ constexpr inline T Length2(const Vector3<T>& v)
 }
 
 template <typename T>
-constexpr inline T Length(const Vector3<T>& v)
+inline T Length(const Vector3<T>& v)
 {
     return std::sqrt(Length2(v));
 }
 
 template <typename T>
-inline T Dist2(const Vector3<T>& a, const Vector3<T>& b)
+constexpr inline T Dist2(const Vector3<T>& a, const Vector3<T>& b)
 {
     return Length2(b - a);
 }
@@ -464,91 +454,91 @@ inline T Dist(const Vector3<T>& a, const Vector3<T>& b)
 // Vector4 inline functions begin
 
 template <typename T>
-inline Vector4<T> Min(const Vector4<T>& a, const Vector4<T>& b)
+constexpr inline Vector4<T> Min(const Vector4<T>& a, const Vector4<T>& b)
 {
     return Vector4<T>(std::min(a.x, b.x), std::min(a.y, b.y), std::min(a.z, b.z), std::min(a.w, b.w));
 }
 
 template <typename T>
-inline Vector4<T> Max(const Vector4<T>& a, const Vector4<T>& b)
+constexpr inline Vector4<T> Max(const Vector4<T>& a, const Vector4<T>& b)
 {
     return Vector4<T>(std::max(a.x, b.x), std::max(a.y, b.y), std::max(a.z, b.z), std::max(a.w, b.w));
 }
 
 template <typename T>
-inline T Dot(const Vector4<T>& a, const Vector4<T>& b)
+constexpr inline T Dot(const Vector4<T>& a, const Vector4<T>& b)
 {
     return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
 
 template <typename T>
-inline Vector4<T> operator+(const Vector4<T>& a, const Vector4<T>& b)
+constexpr inline Vector4<T> operator+(const Vector4<T>& a, const Vector4<T>& b)
 {
     return Vector4<T>(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
 }
 
 template <typename T, typename U>
-inline Vector4<T> operator+(const Vector4<T>& a, U b)
+constexpr inline Vector4<T> operator+(const Vector4<T>& a, U b)
 {
     return Vector4<T>(a.x + b, a.y + b, a.z + b, a.w + b);
 }
 
 template <typename T>
-inline Vector4<T> operator-(const Vector4<T>& a, const Vector4<T>& b)
+constexpr inline Vector4<T> operator-(const Vector4<T>& a, const Vector4<T>& b)
 {
     return Vector4<T>(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
 }
 
 template <typename T, typename U>
-inline Vector4<T> operator-(const Vector4<T>& a, U b)
+constexpr inline Vector4<T> operator-(const Vector4<T>& a, U b)
 {
     return Vector4<T>(a.x - b, a.y - b, a.z - b, a.w - b);
 }
 
 template <typename T, typename U>
-inline Vector4<T> operator*(const Vector4<T>& v, U s)
+constexpr inline Vector4<T> operator*(const Vector4<T>& v, U s)
 {
     return Vector4<T>(v.x * s, v.y * s, v.z * s, v.w * s);
 }
 
 template <typename T, typename U>
-inline Vector4<T> operator*(U s, const Vector4<T>& v)
+constexpr inline Vector4<T> operator*(U s, const Vector4<T>& v)
 {
     return Vector4<T>(v.x * s, v.y * s, v.z * s, v.w * s);
 }
 
 template <typename T>
-inline Vector4<T> operator*(const Vector4<T>& a, const Vector4<T>& b)
+constexpr inline Vector4<T> operator*(const Vector4<T>& a, const Vector4<T>& b)
 {
     return Vector4<T>(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w);
 }
 
 template <typename T, typename U>
-inline Vector4<T> operator/(const Vector4<T>& v, U s)
+constexpr inline Vector4<T> operator/(const Vector4<T>& v, U s)
 {
     return Vector4<T>(v.x / s, v.y / s, v.z / s, v.w / s);
 }
 
 template <typename T, typename U>
-inline Vector4<T> operator/(U s, const Vector4<T>& v)
+constexpr inline Vector4<T> operator/(U s, const Vector4<T>& v)
 {
     return Vector4<T>(s / v.x, s / v.y, s / v.z, s / v.w);
 }
 
 template <typename T>
-inline Vector4<T> operator/(const Vector4<T>& a, const Vector4<T>& b)
+constexpr inline Vector4<T> operator/(const Vector4<T>& a, const Vector4<T>& b)
 {
     return Vector4<T>(a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w);
 }
 
 template <typename T>
-inline bool operator==(const Vector4<T>& a, const Vector4<T>& b)
+constexpr inline bool operator==(const Vector4<T>& a, const Vector4<T>& b)
 {
     return a.x == b.x && a.y == b.y && a.z == b.z && a.w == b.w;
 }
 
 template <typename T>
-inline bool operator!=(const Vector4<T>& a, const Vector4<T>& b)
+constexpr inline bool operator!=(const Vector4<T>& a, const Vector4<T>& b)
 {
     return a.x != b.x || a.y != b.y || a.z != b.z || a.w != b.w;
 }
