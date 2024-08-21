@@ -549,6 +549,18 @@ constexpr inline bool operator!=(const Vector4<T>& a, const Vector4<T>& b)
     return a.x != b.x || a.y != b.y || a.z != b.z || a.w != b.w;
 }
 
+template <typename T>
+constexpr inline T Length2(const Vector4<T>& v)
+{
+    return v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w;
+}
+
+template <typename T>
+inline T Length(const Vector4<T>& v)
+{
+    return std::sqrt(Length2(v));
+}
+
 // Vector4 inline functions end
 
 } // namespace wak
