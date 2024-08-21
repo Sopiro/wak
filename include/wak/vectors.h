@@ -100,6 +100,12 @@ struct Vector3 : public Tuple3<Vector3, T>
     }
 
     template <typename U>
+    constexpr Vector3(Vector2<U> v, T z)
+        : Tuple3<Vector3, T>(T(v.x), T(v.y), z)
+    {
+    }
+
+    template <typename U>
     constexpr Vector3(Vector3<U> v)
         : Tuple3<Vector3, T>(T(v.x), T(v.y), T(v.z))
     {
