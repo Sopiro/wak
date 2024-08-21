@@ -71,14 +71,14 @@ struct Transform
         p.z = m[3][2];
     }
 
-    void Set(const Vec3& position, const Quat& orientation, const Vec3& scale)
+    constexpr void Set(const Vec3& position, const Quat& orientation, const Vec3& scale)
     {
         p = position;
         q = orientation;
         s = scale;
     }
 
-    void SetIdentity()
+    constexpr void SetIdentity()
     {
         p.SetZero();
         q.SetIdentity();
