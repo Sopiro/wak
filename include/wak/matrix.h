@@ -295,8 +295,8 @@ struct Mat4
     Mat4 Rotate(const Vec3& euler_rotation) const;
     Mat4 Translate(const Vec3& translation) const;
 
-    static constexpr Mat4 Orth(Float left, Float right, Float bottom, Float top, Float z_near, Float z_far);
-    static constexpr Mat4 Perspective(Float vertical_fov, Float aspect_ratio, Float z_near, Float z_far);
+    static Mat4 Orth(Float left, Float right, Float bottom, Float top, Float z_near, Float z_far);
+    static Mat4 Perspective(Float vertical_fov, Float aspect_ratio, Float z_near, Float z_far);
 
     std::string ToString() const
     {
@@ -582,7 +582,7 @@ inline Mat4 Mat4::Translate(const Vec3& v) const
     return Mul(*this, t);
 }
 
-constexpr inline Mat4 Mat4::Orth(Float left, Float right, Float bottom, Float top, Float z_near, Float z_far)
+inline Mat4 Mat4::Orth(Float left, Float right, Float bottom, Float top, Float z_near, Float z_far)
 {
     Mat4 t{ identity };
 
@@ -599,7 +599,7 @@ constexpr inline Mat4 Mat4::Orth(Float left, Float right, Float bottom, Float to
     return t;
 }
 
-constexpr inline Mat4 Mat4::Perspective(Float vertical_fov, Float aspect_ratio, Float z_near, Float z_far)
+inline Mat4 Mat4::Perspective(Float vertical_fov, Float aspect_ratio, Float z_near, Float z_far)
 {
     Mat4 t{ identity };
 

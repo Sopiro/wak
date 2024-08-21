@@ -176,7 +176,7 @@ struct Vector4 : public Tuple4<Vector4, T>
 
     T Normalize()
     {
-        T length = Length();
+        T length = Length(*this);
         if (length < std::numeric_limits<T>::epsilon())
         {
             return T(0);
