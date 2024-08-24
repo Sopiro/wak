@@ -1,6 +1,7 @@
 #pragma once
 
 #include "asserts.h"
+#include "floats.h"
 #include "types.h"
 
 namespace wak
@@ -14,8 +15,8 @@ struct Tuple2
     constexpr Tuple2() = default;
 
     constexpr Tuple2(T x, T y)
-        : x(x)
-        , y(y)
+        : x{ x }
+        , y{ y }
     {
         // WakAssert(!IsNullish());
     }
@@ -110,7 +111,7 @@ struct Tuple2
     constexpr Child<T>& operator/=(U d)
     {
         WakAssert(d != 0);
-        WakAssert(!IsNullish(d));
+        WakAssert(!wak::IsNullish(d));
         x /= d;
         y /= d;
         return static_cast<Child<T>&>(*this);
@@ -144,16 +145,16 @@ struct Tuple3
     constexpr Tuple3() = default;
 
     constexpr Tuple3(T x, T y, T z)
-        : x(x)
-        , y(y)
-        , z(z)
+        : x{ x }
+        , y{ y }
+        , z{ z }
     {
         // WakAssert(!IsNullish());
     }
 
     bool IsNullish() const
     {
-        return IsNullish(x) || IsNullish(y) || IsNullish(z);
+        return wak::IsNullish(x) || wak::IsNullish(y) || wak::IsNullish(z);
     }
 
     T operator[](int32 i) const
@@ -280,10 +281,10 @@ struct Tuple4
     constexpr Tuple4() = default;
 
     constexpr Tuple4(T x, T y, T z, T w)
-        : x(x)
-        , y(y)
-        , z(z)
-        , w(w)
+        : x{ x }
+        , y{ y }
+        , z{ z }
+        , w{ w }
     {
         // WakAssert(!IsNullish());
     }
