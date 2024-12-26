@@ -4,14 +4,14 @@
 #include "common.h"
 #include "types.h"
 
-#ifdef WAK_DOUBLE_PRECISION
-typedef double Float;
-#else
-typedef float Float;
-#endif
-
 namespace wak
 {
+
+#ifdef WAK_DOUBLE_PRECISION
+using Float = double;
+#else
+using Float = float;
+#endif
 
 constexpr Float pi = Float(3.14159265358979323846);
 constexpr Float two_pi = Float(2 * pi);
