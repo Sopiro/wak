@@ -246,7 +246,7 @@ inline void BoundingBox2<T>::ComputeBoundingCircle(Point2* center, T* radius) co
 template <typename T>
 inline std::string BoundingBox2<T>::ToString() const
 {
-    return std::format("min:\t{}\nmax:\t{}", min.ToString(), max.ToString());
+    return FormatString("min: %s\nmax: %s", min.ToString().c_str(), max.ToString().c_str());
 }
 
 template <typename T>
@@ -490,7 +490,7 @@ inline void BoundingBox3<T>::ComputeBoundingSphere(Point3* center, T* radius) co
 template <typename T>
 inline std::string BoundingBox3<T>::ToString() const
 {
-    return std::format("min:\t{}\nmax:\t{}", min.ToString(), max.ToString());
+    return FormatString("min: %s\nmax: %s", min.ToString().c_str(), max.ToString().c_str());
 }
 
 // Iterators

@@ -2,6 +2,7 @@
 
 #include "asserts.h"
 #include "floats.h"
+#include "format.h"
 #include "types.h"
 
 namespace wak
@@ -131,7 +132,7 @@ struct Tuple2
 
     std::string ToString() const
     {
-        return std::format("{:.4f}\t{:.4f}", float(x), float(y));
+        return FormatString("%.4f\t%.4f", x, y);
     }
 
     T x{}, y{};
@@ -267,7 +268,7 @@ struct Tuple3
 
     std::string ToString() const
     {
-        return std::format("{:.4f}\t{:.4f}\t{:.4f}", float(x), float(y), float(z));
+        return FormatString("%.4f\t%.4f\t%.4f", x, y, z);
     }
 
     T x{}, y{}, z{};
@@ -410,7 +411,7 @@ struct Tuple4
 
     std::string ToString() const
     {
-        return std::format("{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}", float(x), float(y), float(z), float(w));
+        return FormatString("%.4f\t%.4f\t%.4f\t%.4f", x, y, z, w);
     }
 
     T x{}, y{}, z{}, w{};

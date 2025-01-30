@@ -251,7 +251,7 @@ struct Quat
 
     std::string ToString() const
     {
-        return std::format("{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}", x, y, z, w);
+        return FormatString("%.4f\t%.4f\t%.4f\t%.4f", x, y, z, w);
     }
 
     Float x, y, z, w;

@@ -1,10 +1,15 @@
 #pragma once
 
-typedef signed char int8;
-typedef signed short int16;
-typedef signed int int32;
-typedef signed long long int64;
-typedef unsigned char uint8;
-typedef unsigned short uint16;
-typedef unsigned int uint32;
-typedef unsigned long long uint64;
+namespace wak
+{
+
+using int8 = int8_t;
+using int16 = int16_t;
+using int32 = int32_t;
+using int64 = int64_t;
+using uint8 = uint8_t;
+using uint16 = uint16_t;
+using uint32 = uint32_t;
+using uint64 = uint64_t;
+
+} // namespace wak

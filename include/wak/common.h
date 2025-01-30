@@ -5,5 +5,4 @@
 #include <cmath>
 #include <cstdint>
 #include <cstring>
-#include <format>
 #include <iostream>
