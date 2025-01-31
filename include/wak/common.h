@@ -1,10 +1,11 @@
 #pragma once
 
-#include <cassert>
+#include <assert.h>
+#include <math.h>
+#include <stdint.h>
+#include <string.h>
+
 #include <chrono>
-#include <cmath>
-#include <cstdint>
-#include <cstring>
 #include <iostream>
 
 #ifdef __CUDACC__
