@@ -19,27 +19,23 @@ struct Ray
     static constexpr Float epsilon = Float(1e-4);
 };
 
-WAK_CPU_GPU
-inline Ray::Ray(const Point3& origin, const Vec3& direction)
+WAK_CPU_GPU inline Ray::Ray(const Point3& origin, const Vec3& direction)
     : o{ origin }
     , d{ direction }
 {
 }
 
-WAK_CPU_GPU
-inline Point3 Ray::At(Float t) const
+WAK_CPU_GPU inline Point3 Ray::At(Float t) const
 {
     return o + d * t;
 }
 
-WAK_CPU_GPU
-inline Ray Mul(const Transform& tf, const Ray& ray)
+WAK_CPU_GPU inline Ray Mul(const Transform& tf, const Ray& ray)
 {
     return Ray(Mul(tf, ray.o), tf.q.Rotate(ray.d));
 }
 
-WAK_CPU_GPU
-inline Ray MulT(const Transform& tf, const Ray& ray)
+WAK_CPU_GPU inline Ray MulT(const Transform& tf, const Ray& ray)
 {
     return Ray(MulT(tf, ray.o), tf.q.RotateInv(ray.d));
 }

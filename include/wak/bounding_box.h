@@ -51,9 +51,8 @@ struct BoundingBox2
     WAK_CPU_GPU static BoundingBox2 Union(const BoundingBox2& aabb, const Vector2<T>& p);
 };
 
-WAK_CPU_GPU
 template <typename T>
-inline BoundingBox2<T> BoundingBox2<T>::Union(const BoundingBox2& aabb1, const BoundingBox2& aabb2)
+WAK_CPU_GPU inline BoundingBox2<T> BoundingBox2<T>::Union(const BoundingBox2& aabb1, const BoundingBox2& aabb2)
 {
     Vector2<T> min = Min(aabb1.min, aabb2.min);
     Vector2<T> max = Max(aabb1.max, aabb2.max);
@@ -61,9 +60,8 @@ inline BoundingBox2<T> BoundingBox2<T>::Union(const BoundingBox2& aabb1, const B
     return BoundingBox2{ min, max };
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline BoundingBox2<T> BoundingBox2<T>::Union(const BoundingBox2& aabb, const Vector2<T>& point)
+WAK_CPU_GPU inline BoundingBox2<T> BoundingBox2<T>::Union(const BoundingBox2& aabb, const Vector2<T>& point)
 {
     Vector2<T> min = Min(aabb.min, point);
     Vector2<T> max = Max(aabb.max, point);
@@ -71,77 +69,67 @@ inline BoundingBox2<T> BoundingBox2<T>::Union(const BoundingBox2& aabb, const Ve
     return BoundingBox2{ min, max };
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline BoundingBox2<T>::BoundingBox2()
+WAK_CPU_GPU inline BoundingBox2<T>::BoundingBox2()
     : min{ max_float }
     , max{ -max_float }
 {
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline BoundingBox2<T>::BoundingBox2(const Vector2<T>& min, const Vector2<T>& max)
+WAK_CPU_GPU inline BoundingBox2<T>::BoundingBox2(const Vector2<T>& min, const Vector2<T>& max)
     : min{ min }
     , max{ max }
 {
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline Vector2<T>& BoundingBox2<T>::operator[](int32 i)
+WAK_CPU_GPU inline Vector2<T>& BoundingBox2<T>::operator[](int32 i)
 {
     WakAssert(i == 0 || i == 1);
     return (i == 0) ? min : max;
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline Vector2<T> BoundingBox2<T>::operator[](int32 i) const
+WAK_CPU_GPU inline Vector2<T> BoundingBox2<T>::operator[](int32 i) const
 {
     WakAssert(i == 0 || i == 1);
     return (i == 0) ? min : max;
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline Vector2<T> BoundingBox2<T>::GetCenter() const
+WAK_CPU_GPU inline Vector2<T> BoundingBox2<T>::GetCenter() const
 {
     return (min + max) * 0.5f;
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline Vector2<T> BoundingBox2<T>::GetExtents() const
+WAK_CPU_GPU inline Vector2<T> BoundingBox2<T>::GetExtents() const
 {
     return (max - min);
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline T BoundingBox2<T>::GetSurfaceArea() const
+WAK_CPU_GPU inline T BoundingBox2<T>::GetSurfaceArea() const
 {
     return (max.x - min.x) * (max.y - min.y);
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline T BoundingBox2<T>::GetPerimeter() const
+WAK_CPU_GPU inline T BoundingBox2<T>::GetPerimeter() const
 {
     Vector2<T> w = max - min;
     return 2 * (w.x + w.y);
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline bool BoundingBox2<T>::Contains(const BoundingBox2& other) const
+WAK_CPU_GPU inline bool BoundingBox2<T>::Contains(const BoundingBox2& other) const
 {
     return min.x <= other.min.x && min.y <= other.min.y && max.x >= other.max.x && max.y >= other.max.y;
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline bool BoundingBox2<T>::TestPoint(const Vector2<T>& point) const
+WAK_CPU_GPU inline bool BoundingBox2<T>::TestPoint(const Vector2<T>& point) const
 {
     if (min.x > point.x || max.x < point.x) return false;
     if (min.y > point.y || max.y < point.y) return false;
@@ -149,9 +137,8 @@ inline bool BoundingBox2<T>::TestPoint(const Vector2<T>& point) const
     return true;
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline bool BoundingBox2<T>::TestOverlap(const BoundingBox2& other) const
+WAK_CPU_GPU inline bool BoundingBox2<T>::TestOverlap(const BoundingBox2& other) const
 {
     if (min.x > other.max.x || max.x < other.min.x) return false;
     if (min.y > other.max.y || max.y < other.min.y) return false;
@@ -160,9 +147,8 @@ inline bool BoundingBox2<T>::TestOverlap(const BoundingBox2& other) const
 }
 
 // https://raytracing.github.io/books/RayTracingTheNextWeek.html#boundingvolumehierarchies/anoptimizedaabbhitmethod
-WAK_CPU_GPU
 template <typename T>
-inline bool BoundingBox2<T>::TestRay(const Ray& ray, Float t_min, Float t_max) const
+WAK_CPU_GPU inline bool BoundingBox2<T>::TestRay(const Ray& ray, Float t_min, Float t_max) const
 {
     for (int32 axis = 0; axis < 2; ++axis)
     {
@@ -190,9 +176,8 @@ inline bool BoundingBox2<T>::TestRay(const Ray& ray, Float t_min, Float t_max) c
 }
 
 // https://www.pbr-book.org/4ed/Shapes/Basic_Shape_Interface#Bounds3::IntersectP
-WAK_CPU_GPU
 template <typename T>
-inline bool BoundingBox2<T>::TestRay(Vec2 o, Float t_min, Float t_max, Vec2 inv_dir, const int is_neg_dir[2]) const
+WAK_CPU_GPU inline bool BoundingBox2<T>::TestRay(Vec2 o, Float t_min, Float t_max, Vec2 inv_dir, const int is_neg_dir[2]) const
 {
     const BoundingBox2<Float>& aabb = *this;
 
@@ -223,9 +208,8 @@ inline bool BoundingBox2<T>::TestRay(Vec2 o, Float t_min, Float t_max, Vec2 inv_
     return true;
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline Float BoundingBox2<T>::Intersect(const Ray& ray, Float t_min, Float t_max) const
+WAK_CPU_GPU inline Float BoundingBox2<T>::Intersect(const Ray& ray, Float t_min, Float t_max) const
 {
     for (int32 axis = 0; axis < 2; ++axis)
     {
@@ -252,9 +236,8 @@ inline Float BoundingBox2<T>::Intersect(const Ray& ray, Float t_min, Float t_max
     return t_min;
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline void BoundingBox2<T>::ComputeBoundingCircle(Point2* center, T* radius) const
+WAK_CPU_GPU inline void BoundingBox2<T>::ComputeBoundingCircle(Point2* center, T* radius) const
 {
     *center = GetCenter();
     *radius = TestPoint(*center) ? Dist(*center, max) : 0;
@@ -298,9 +281,8 @@ struct BoundingBox3
     WAK_CPU_GPU static BoundingBox3 Union(const BoundingBox3& aabb, const Vector3<T>& p);
 };
 
-WAK_CPU_GPU
 template <typename T>
-inline BoundingBox3<T> BoundingBox3<T>::Union(const BoundingBox3& aabb1, const BoundingBox3& aabb2)
+WAK_CPU_GPU inline BoundingBox3<T> BoundingBox3<T>::Union(const BoundingBox3& aabb1, const BoundingBox3& aabb2)
 {
     Vector3<T> min = Min(aabb1.min, aabb2.min);
     Vector3<T> max = Max(aabb1.max, aabb2.max);
@@ -308,9 +290,8 @@ inline BoundingBox3<T> BoundingBox3<T>::Union(const BoundingBox3& aabb1, const B
     return BoundingBox3{ min, max };
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline BoundingBox3<T> BoundingBox3<T>::Union(const BoundingBox3& aabb, const Vector3<T>& point)
+WAK_CPU_GPU inline BoundingBox3<T> BoundingBox3<T>::Union(const BoundingBox3& aabb, const Vector3<T>& point)
 {
     Vector3<T> min = Min(aabb.min, point);
     Vector3<T> max = Max(aabb.max, point);
@@ -318,78 +299,68 @@ inline BoundingBox3<T> BoundingBox3<T>::Union(const BoundingBox3& aabb, const Ve
     return BoundingBox3{ min, max };
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline BoundingBox3<T>::BoundingBox3()
+WAK_CPU_GPU inline BoundingBox3<T>::BoundingBox3()
     : min{ max_float }
     , max{ -max_float }
 {
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline BoundingBox3<T>::BoundingBox3(const Vector3<T>& min, const Vector3<T>& max)
+WAK_CPU_GPU inline BoundingBox3<T>::BoundingBox3(const Vector3<T>& min, const Vector3<T>& max)
     : min{ min }
     , max{ max }
 {
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline Vector3<T>& BoundingBox3<T>::operator[](int32 i)
+WAK_CPU_GPU inline Vector3<T>& BoundingBox3<T>::operator[](int32 i)
 {
     WakAssert(i == 0 || i == 1);
     return (i == 0) ? min : max;
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline Vector3<T> BoundingBox3<T>::operator[](int32 i) const
+WAK_CPU_GPU inline Vector3<T> BoundingBox3<T>::operator[](int32 i) const
 {
     WakAssert(i == 0 || i == 1);
     return (i == 0) ? min : max;
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline Vector3<T> BoundingBox3<T>::GetCenter() const
+WAK_CPU_GPU inline Vector3<T> BoundingBox3<T>::GetCenter() const
 {
     return (min + max) * 0.5f;
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline Vector3<T> BoundingBox3<T>::GetExtents() const
+WAK_CPU_GPU inline Vector3<T> BoundingBox3<T>::GetExtents() const
 {
     return (max - min);
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline T BoundingBox3<T>::GetVolume() const
+WAK_CPU_GPU inline T BoundingBox3<T>::GetVolume() const
 {
     return (max.x - min.x) * (max.y - min.y) * (max.z - min.z);
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline T BoundingBox3<T>::GetSurfaceArea() const
+WAK_CPU_GPU inline T BoundingBox3<T>::GetSurfaceArea() const
 {
     Vector3<T> w = max - min;
     return 2 * ((w.x * w.y) + (w.y * w.z) + (w.z * w.x));
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline bool BoundingBox3<T>::Contains(const BoundingBox3& other) const
+WAK_CPU_GPU inline bool BoundingBox3<T>::Contains(const BoundingBox3& other) const
 {
     return min.x <= other.min.x && min.y <= other.min.y && min.z <= other.min.z && max.x >= other.max.x && max.y >= other.max.y &&
            max.z >= other.max.z;
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline bool BoundingBox3<T>::TestPoint(const Vector3<T>& point) const
+WAK_CPU_GPU inline bool BoundingBox3<T>::TestPoint(const Vector3<T>& point) const
 {
     if (min.x > point.x || max.x < point.x) return false;
     if (min.y > point.y || max.y < point.y) return false;
@@ -398,9 +369,8 @@ inline bool BoundingBox3<T>::TestPoint(const Vector3<T>& point) const
     return true;
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline bool BoundingBox3<T>::TestOverlap(const BoundingBox3& other) const
+WAK_CPU_GPU inline bool BoundingBox3<T>::TestOverlap(const BoundingBox3& other) const
 {
     if (min.x > other.max.x || max.x < other.min.x) return false;
     if (min.y > other.max.y || max.y < other.min.y) return false;
@@ -410,9 +380,8 @@ inline bool BoundingBox3<T>::TestOverlap(const BoundingBox3& other) const
 }
 
 // https://raytracing.github.io/books/RayTracingTheNextWeek.html#boundingvolumehierarchies/anoptimizedaabbhitmethod
-WAK_CPU_GPU
 template <typename T>
-inline bool BoundingBox3<T>::TestRay(const Ray& ray, Float t_min, Float t_max) const
+WAK_CPU_GPU inline bool BoundingBox3<T>::TestRay(const Ray& ray, Float t_min, Float t_max) const
 {
     for (int32 axis = 0; axis < 3; ++axis)
     {
@@ -440,9 +409,8 @@ inline bool BoundingBox3<T>::TestRay(const Ray& ray, Float t_min, Float t_max) c
 }
 
 // https://www.pbr-book.org/4ed/Shapes/Basic_Shape_Interface#Bounds3::IntersectP
-WAK_CPU_GPU
 template <typename T>
-inline bool BoundingBox3<T>::TestRay(Vec3 o, Float t_min, Float t_max, Vec3 inv_dir, const int is_neg_dir[3]) const
+WAK_CPU_GPU inline bool BoundingBox3<T>::TestRay(Vec3 o, Float t_min, Float t_max, Vec3 inv_dir, const int is_neg_dir[3]) const
 {
     const BoundingBox3<Float>& aabb = *this;
 
@@ -484,9 +452,8 @@ inline bool BoundingBox3<T>::TestRay(Vec3 o, Float t_min, Float t_max, Vec3 inv_
     return true;
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline Float BoundingBox3<T>::Intersect(const Ray& ray, Float t_min, Float t_max) const
+WAK_CPU_GPU inline Float BoundingBox3<T>::Intersect(const Ray& ray, Float t_min, Float t_max) const
 {
     for (int32 axis = 0; axis < 3; ++axis)
     {
@@ -513,9 +480,8 @@ inline Float BoundingBox3<T>::Intersect(const Ray& ray, Float t_min, Float t_max
     return t_min;
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline void BoundingBox3<T>::ComputeBoundingSphere(Point3* center, T* radius) const
+WAK_CPU_GPU inline void BoundingBox3<T>::ComputeBoundingSphere(Point3* center, T* radius) const
 {
     *center = GetCenter();
     *radius = TestPoint(*center) ? Dist(*center, max) : 0;

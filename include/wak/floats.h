@@ -23,22 +23,19 @@ constexpr Float epsilon = std::numeric_limits<Float>::epsilon();
 constexpr Float infinity = std::numeric_limits<Float>::infinity();
 constexpr Float max_float = std::numeric_limits<Float>::max();
 
-WAK_CPU_GPU
-inline bool IsNullish(int32 v)
+WAK_CPU_GPU inline bool IsNullish(int32 v)
 {
     WakNotUsed(v);
     return false;
 }
 
-WAK_CPU_GPU
-inline bool IsNullish(Float v)
+WAK_CPU_GPU inline bool IsNullish(Float v)
 {
     return std::isnan(v) || std::isinf(v);
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline bool IsNullish(const T& v)
+WAK_CPU_GPU inline bool IsNullish(const T& v)
 {
     return v.IsNullish();
 }

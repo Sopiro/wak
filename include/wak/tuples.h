@@ -61,40 +61,35 @@ struct Tuple2
         return { -x, -y };
     }
 
-    WAK_CPU_GPU
     template <typename U>
-    constexpr auto operator+(Child<U> c) const -> Child<decltype(T{} + U{})>
+    WAK_CPU_GPU constexpr auto operator+(Child<U> c) const -> Child<decltype(T{} + U{})>
     {
         WakAssert(!c.IsNullish());
         return { x + c.x, y + c.y };
     }
 
-    WAK_CPU_GPU
     template <typename U>
-    constexpr auto operator-(Child<U> c) const -> Child<decltype(T{} - U{})>
+    WAK_CPU_GPU constexpr auto operator-(Child<U> c) const -> Child<decltype(T{} - U{})>
     {
         WakAssert(!c.IsNullish());
         return { x - c.x, y - c.y };
     }
 
-    WAK_CPU_GPU
     template <typename U>
-    constexpr auto operator*(U s) const -> Child<decltype(T{} * U{})>
+    WAK_CPU_GPU constexpr auto operator*(U s) const -> Child<decltype(T{} * U{})>
     {
         return { s * x, s * y };
     }
 
-    WAK_CPU_GPU
     template <typename U>
-    constexpr auto operator/(U d) const -> Child<decltype(T{} / U{})>
+    WAK_CPU_GPU constexpr auto operator/(U d) const -> Child<decltype(T{} / U{})>
     {
         WakAssert(d != 0 && !wak::IsNullish(d));
         return { x / d, y / d };
     }
 
-    WAK_CPU_GPU
     template <typename U>
-    constexpr Child<T>& operator+=(Child<U> c)
+    WAK_CPU_GPU constexpr Child<T>& operator+=(Child<U> c)
     {
         WakAssert(!c.IsNullish());
         x += c.x;
@@ -102,9 +97,8 @@ struct Tuple2
         return static_cast<Child<T>&>(*this);
     }
 
-    WAK_CPU_GPU
     template <typename U>
-    constexpr Child<T>& operator-=(Child<U> c)
+    WAK_CPU_GPU constexpr Child<T>& operator-=(Child<U> c)
     {
         WakAssert(!c.IsNullish());
         x -= c.x;
@@ -112,9 +106,8 @@ struct Tuple2
         return static_cast<Child<T>&>(*this);
     }
 
-    WAK_CPU_GPU
     template <typename U>
-    constexpr Child<T>& operator*=(U s)
+    WAK_CPU_GPU constexpr Child<T>& operator*=(U s)
     {
         WakAssert(!wak::IsNullish(s));
         x *= s;
@@ -122,9 +115,8 @@ struct Tuple2
         return static_cast<Child<T>&>(*this);
     }
 
-    WAK_CPU_GPU
     template <typename U>
-    constexpr Child<T>& operator/=(U d)
+    WAK_CPU_GPU constexpr Child<T>& operator/=(U d)
     {
         WakAssert(d != 0);
         WakAssert(!wak::IsNullish(d));
@@ -210,40 +202,35 @@ struct Tuple3
         return { -x, -y, -z };
     }
 
-    WAK_CPU_GPU
     template <typename U>
-    constexpr auto operator+(Child<U> c) const -> Child<decltype(T{} + U{})>
+    WAK_CPU_GPU constexpr auto operator+(Child<U> c) const -> Child<decltype(T{} + U{})>
     {
         WakAssert(!c.IsNullish());
         return { x + c.x, y + c.y, z + c.z };
     }
 
-    WAK_CPU_GPU
     template <typename U>
-    constexpr auto operator-(Child<U> c) const -> Child<decltype(T{} - U{})>
+    WAK_CPU_GPU constexpr auto operator-(Child<U> c) const -> Child<decltype(T{} - U{})>
     {
         WakAssert(!c.IsNullish());
         return { x - c.x, y - c.y, z - c.z };
     }
 
-    WAK_CPU_GPU
     template <typename U>
-    constexpr auto operator*(U s) const -> Child<decltype(T{} * U{})>
+    WAK_CPU_GPU constexpr auto operator*(U s) const -> Child<decltype(T{} * U{})>
     {
         return { s * x, s * y, s * z };
     }
 
-    WAK_CPU_GPU
     template <typename U>
-    constexpr auto operator/(U d) const -> Child<decltype(T{} / U{})>
+    WAK_CPU_GPU constexpr auto operator/(U d) const -> Child<decltype(T{} / U{})>
     {
         WakAssert(d != 0);
         return { x / d, y / d, z / d };
     }
 
-    WAK_CPU_GPU
     template <typename U>
-    constexpr Child<T>& operator+=(Child<U> c)
+    WAK_CPU_GPU constexpr Child<T>& operator+=(Child<U> c)
     {
         WakAssert(!c.IsNullish());
         x += c.x;
@@ -252,9 +239,8 @@ struct Tuple3
         return static_cast<Child<T>&>(*this);
     }
 
-    WAK_CPU_GPU
     template <typename U>
-    constexpr Child<T>& operator-=(Child<U> c)
+    WAK_CPU_GPU constexpr Child<T>& operator-=(Child<U> c)
     {
         WakAssert(!c.IsNullish());
         x -= c.x;
@@ -263,9 +249,8 @@ struct Tuple3
         return static_cast<Child<T>&>(*this);
     }
 
-    WAK_CPU_GPU
     template <typename U>
-    constexpr Child<T>& operator*=(U s)
+    WAK_CPU_GPU constexpr Child<T>& operator*=(U s)
     {
         WakAssert(!wak::IsNullish(s));
         x *= s;
@@ -274,9 +259,8 @@ struct Tuple3
         return static_cast<Child<T>&>(*this);
     }
 
-    WAK_CPU_GPU
     template <typename U>
-    constexpr Child<T>& operator/=(U d)
+    WAK_CPU_GPU constexpr Child<T>& operator/=(U d)
     {
         WakAssert(d != 0);
         x /= d;
@@ -365,40 +349,35 @@ struct Tuple4
         return { -x, -y, -z, -w };
     }
 
-    WAK_CPU_GPU
     template <typename U>
-    constexpr auto operator+(Child<U> c) const -> Child<decltype(T{} + U{})>
+    WAK_CPU_GPU constexpr auto operator+(Child<U> c) const -> Child<decltype(T{} + U{})>
     {
         WakAssert(!c.IsNullish());
         return { x + c.x, y + c.y, z + c.z, w + c.w };
     }
 
-    WAK_CPU_GPU
     template <typename U>
-    constexpr auto operator-(Child<U> c) const -> Child<decltype(T{} - U{})>
+    WAK_CPU_GPU constexpr auto operator-(Child<U> c) const -> Child<decltype(T{} - U{})>
     {
         WakAssert(!c.IsNullish());
         return { x - c.x, y - c.y, z - c.z, z - c.w };
     }
 
-    WAK_CPU_GPU
     template <typename U>
-    constexpr auto operator*(U s) const -> Child<decltype(T{} * U{})>
+    WAK_CPU_GPU constexpr auto operator*(U s) const -> Child<decltype(T{} * U{})>
     {
         return { s * x, s * y, s * z, s * w };
     }
 
-    WAK_CPU_GPU
     template <typename U>
-    constexpr auto operator/(U d) const -> Child<decltype(T{} / U{})>
+    WAK_CPU_GPU constexpr auto operator/(U d) const -> Child<decltype(T{} / U{})>
     {
         WakAssert(d != 0);
         return { x / d, y / d, z / d, w / d };
     }
 
-    WAK_CPU_GPU
     template <typename U>
-    constexpr Child<T>& operator+=(Child<U> c)
+    WAK_CPU_GPU constexpr Child<T>& operator+=(Child<U> c)
     {
         WakAssert(!c.IsNullish());
         x += c.x;
@@ -408,9 +387,8 @@ struct Tuple4
         return static_cast<Child<T>&>(*this);
     }
 
-    WAK_CPU_GPU
     template <typename U>
-    constexpr Child<T>& operator-=(Child<U> c)
+    WAK_CPU_GPU constexpr Child<T>& operator-=(Child<U> c)
     {
         WakAssert(!c.IsNullish());
         x -= c.x;
@@ -420,9 +398,8 @@ struct Tuple4
         return static_cast<Child<T>&>(*this);
     }
 
-    WAK_CPU_GPU
     template <typename U>
-    constexpr Child<T>& operator*=(U s)
+    WAK_CPU_GPU constexpr Child<T>& operator*=(U s)
     {
         WakAssert(!wak::IsNullish(s));
         x *= s;
@@ -432,9 +409,8 @@ struct Tuple4
         return static_cast<Child<T>&>(*this);
     }
 
-    WAK_CPU_GPU
     template <typename U>
-    constexpr Child<T>& operator/=(U d)
+    WAK_CPU_GPU constexpr Child<T>& operator/=(U d)
     {
         WakAssert(d != 0);
         x /= d;

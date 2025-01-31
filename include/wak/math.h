@@ -13,63 +13,54 @@ constexpr inline Vec3 x_axis{ 1, 0, 0 };
 constexpr inline Vec3 y_axis{ 0, 1, 0 };
 constexpr inline Vec3 z_axis{ 0, 0, 1 };
 
-WAK_CPU_GPU
 template <typename T>
-constexpr inline T Sqr(T v)
+WAK_CPU_GPU constexpr inline T Sqr(T v)
 {
     return v * v;
 }
 
-WAK_CPU_GPU
-inline Float SafeSqrt(Float x)
+WAK_CPU_GPU inline Float SafeSqrt(Float x)
 {
     return std::sqrt(std::max<Float>(0, x));
 }
 
-WAK_CPU_GPU
 template <typename T>
-constexpr inline T Abs(T a)
+WAK_CPU_GPU constexpr inline T Abs(T a)
 {
     return a > T(0) ? a : -a;
 }
 
-WAK_CPU_GPU
 template <typename T>
-constexpr inline Float AbsDot(T a, T b)
+WAK_CPU_GPU constexpr inline Float AbsDot(T a, T b)
 {
     return std::abs(Dot(a, b));
 }
 
-WAK_CPU_GPU
-constexpr inline Float DegToRad(Float deg)
+WAK_CPU_GPU constexpr inline Float DegToRad(Float deg)
 {
     return deg * pi / 180;
 }
 
-WAK_CPU_GPU
-constexpr inline Float RadToDeg(Float rad)
+WAK_CPU_GPU constexpr inline Float RadToDeg(Float rad)
 {
     return rad * inv_pi * 180;
 }
 
-WAK_CPU_GPU
 template <typename T, typename U, typename V>
-constexpr inline T Clamp(T v, U l, V r)
+WAK_CPU_GPU constexpr inline T Clamp(T v, U l, V r)
 {
     return v < l ? T(l) : (v > r ? T(r) : v);
 }
 
-WAK_CPU_GPU
 template <template <typename> class V, typename T>
-inline V<T> Normalize(const V<T>& v)
+WAK_CPU_GPU inline V<T> Normalize(const V<T>& v)
 {
     T inv_length = T(1) / Length(v);
     return v * inv_length;
 }
 
-WAK_CPU_GPU
 template <template <typename> class V, typename T>
-inline V<T> NormalizeSafe(const V<T>& v)
+WAK_CPU_GPU inline V<T> NormalizeSafe(const V<T>& v)
 {
     T length = v.Length();
     if (length < std::numeric_limits<T>::epsilon())
@@ -81,16 +72,14 @@ inline V<T> NormalizeSafe(const V<T>& v)
     return v * inv_length;
 }
 
-WAK_CPU_GPU
 template <typename T>
-constexpr inline T Lerp(const T& start, const T& end, Float t)
+WAK_CPU_GPU constexpr inline T Lerp(const T& start, const T& end, Float t)
 {
     return start * (T(1) - t) + end * t;
 }
 
-WAK_CPU_GPU
 template <typename T>
-inline T Slerp(const T& start, const T& end, Float t)
+WAK_CPU_GPU inline T Slerp(const T& start, const T& end, Float t)
 {
     Float dot = Clamp(Dot(start, end), Float(-1), Float(1));
     Float angle = std::acos(dot) * t;
@@ -101,23 +90,20 @@ inline T Slerp(const T& start, const T& end, Float t)
     return start * std::cos(angle) + rv * std::sin(angle);
 }
 
-WAK_CPU_GPU
 template <typename T>
-constexpr inline T Project(const T& v, const T& n)
+WAK_CPU_GPU constexpr inline T Project(const T& v, const T& n)
 {
     return v - n * Dot(v, n);
 }
 
-WAK_CPU_GPU
 template <typename T>
-constexpr inline T Reflect(const T& v, const T& n)
+WAK_CPU_GPU constexpr inline T Reflect(const T& v, const T& n)
 {
     return -v + 2 * Dot(v, n) * n;
 }
 
-WAK_CPU_GPU
 template <typename Predicate>
-constexpr inline int32 FindInterval(int32 size, const Predicate& pred)
+WAK_CPU_GPU constexpr inline int32 FindInterval(int32 size, const Predicate& pred)
 {
     int32 first = 0, len = size;
     while (len > 0)

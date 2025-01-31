@@ -27,29 +27,25 @@ private:
     size_t ptr;
 };
 
-WAK_CPU_GPU
-inline Timer::Timer()
+WAK_CPU_GPU inline Timer::Timer()
     : ptr{ 0 }
 {
     Mark();
 }
 
-WAK_CPU_GPU
-inline void Timer::Mark()
+WAK_CPU_GPU inline void Timer::Mark()
 {
     time_points.push_back(clock::now());
 }
 
-WAK_CPU_GPU
-inline void Timer::Reset()
+WAK_CPU_GPU inline void Timer::Reset()
 {
     time_points.clear();
     time_points.push_back(clock::now());
     ptr = 0;
 }
 
-WAK_CPU_GPU
-inline double Timer::Get()
+WAK_CPU_GPU inline double Timer::Get()
 {
     if (ptr < time_points.size() - 1)
     {

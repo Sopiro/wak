@@ -282,21 +282,18 @@ struct Quat
 
 // Quat inline functions begin
 
-WAK_CPU_GPU
-constexpr inline bool operator==(const Quat& a, const Quat& b)
+WAK_CPU_GPU constexpr inline bool operator==(const Quat& a, const Quat& b)
 {
     return a.x == b.x && a.y == b.y && a.z == b.z && a.w == b.w;
 }
 
-WAK_CPU_GPU
-constexpr inline Float Dot(const Quat& a, const Quat& b)
+WAK_CPU_GPU constexpr inline Float Dot(const Quat& a, const Quat& b)
 {
     return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
 
 // Quaternion multiplication
-WAK_CPU_GPU
-constexpr inline Quat operator*(const Quat& a, const Quat& b)
+WAK_CPU_GPU constexpr inline Quat operator*(const Quat& a, const Quat& b)
 {
     // clang-format off
     return Quat(a.w * b.x + b.w * a.x + a.y * b.z - b.y * a.z,
@@ -306,21 +303,18 @@ constexpr inline Quat operator*(const Quat& a, const Quat& b)
     // clang-format on
 }
 
-WAK_CPU_GPU
-constexpr inline Quat operator+(const Quat& a, const Quat& b)
+WAK_CPU_GPU constexpr inline Quat operator+(const Quat& a, const Quat& b)
 {
     return Quat(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
 }
 
-WAK_CPU_GPU
-constexpr inline Quat operator-(const Quat& a, const Quat& b)
+WAK_CPU_GPU constexpr inline Quat operator-(const Quat& a, const Quat& b)
 {
     return Quat(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
 }
 
 // Compute angle between two quaternions
-WAK_CPU_GPU
-inline Float Angle(const Quat& a, const Quat& b)
+WAK_CPU_GPU inline Float Angle(const Quat& a, const Quat& b)
 {
     return std::acos(Dot(a, b)) * 2;
 }
