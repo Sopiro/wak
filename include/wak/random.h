@@ -5,6 +5,10 @@
 namespace wak
 {
 
+#define pcg32_default_state 0x853c49e6748fea9bULL
+#define pcg32_default_stream 0xda3e39cb94b95bdbULL
+#define pcg32_mult 0x5851f42d4c957f2dULL
+
 // https://www.pcg-random.org/
 class RNG
 {
@@ -121,10 +125,6 @@ public:
     }
 
 private:
-    static inline uint64 pcg32_default_state = 0x853c49e6748fea9bULL;
-    static inline uint64 pcg32_default_stream = 0xda3e39cb94b95bdbULL;
-    static inline uint64 pcg32_mult = 0x5851f42d4c957f2dULL;
-
     uint64 state; // RNG state.  All values are possible.
     uint64 inc;   // Controls which RNG sequence (stream) is
                   // selected. Must *always* be odd.

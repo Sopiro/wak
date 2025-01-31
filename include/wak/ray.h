@@ -7,7 +7,7 @@ namespace wak
 
 struct Ray
 {
-    WAK_CPU_GPU Ray() = default;
+    Ray() = default;
     WAK_CPU_GPU Ray(const Point3& origin, const Vec3& direction);
 
     WAK_CPU_GPU Point3 At(Float t) const;

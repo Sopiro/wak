@@ -8,7 +8,6 @@ namespace wak
 
 struct Quat
 {
-    WAK_CPU_GPU
     constexpr Quat() = default;
 
     WAK_CPU_GPU

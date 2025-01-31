@@ -18,7 +18,6 @@ struct Mat2
 {
     Vec2 ex, ey;
 
-    WAK_CPU_GPU
     constexpr Mat2() = default;
 
     WAK_CPU_GPU
@@ -126,7 +125,6 @@ struct Mat3
 {
     Vec3 ex, ey, ez;
 
-    WAK_CPU_GPU
     constexpr Mat3() = default;
 
     WAK_CPU_GPU
@@ -227,7 +225,6 @@ struct Mat4
 {
     Vec4 ex, ey, ez, ew;
 
-    WAK_CPU_GPU
     constexpr Mat4() = default;
 
     WAK_CPU_GPU

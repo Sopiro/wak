@@ -31,7 +31,7 @@ WAK_CPU_GPU inline bool IsNullish(int32 v)
 
 WAK_CPU_GPU inline bool IsNullish(Float v)
 {
-    return std::isnan(v) || std::isinf(v);
+    return ::isnan(v) || ::isinf(v);
 }
 
 template <typename T>

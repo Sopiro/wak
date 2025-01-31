@@ -35,7 +35,6 @@ struct Vector2 : public Tuple2<Vector2, T>
     using Tuple2<Vector2, T>::x;
     using Tuple2<Vector2, T>::y;
 
-    WAK_CPU_GPU
     constexpr Vector2() = default;
 
     WAK_CPU_GPU
@@ -90,7 +89,6 @@ struct Vector3 : public Tuple3<Vector3, T>
     using Tuple3<Vector3, T>::y;
     using Tuple3<Vector3, T>::z;
 
-    WAK_CPU_GPU
     constexpr Vector3() = default;
 
     WAK_CPU_GPU
@@ -154,7 +152,6 @@ struct Vector4 : public Tuple4<Vector4, T>
     using Tuple4<Vector4, T>::z;
     using Tuple4<Vector4, T>::w;
 
-    WAK_CPU_GPU
     constexpr Vector4() = default;
 
     WAK_CPU_GPU

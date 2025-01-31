@@ -13,7 +13,6 @@ struct Tuple2
 {
     static const int32 dimensions = 2;
 
-    WAK_CPU_GPU
     constexpr Tuple2() = default;
 
     WAK_CPU_GPU
@@ -152,7 +151,6 @@ struct Tuple3
 {
     static const int32 dimensions = 3;
 
-    WAK_CPU_GPU
     constexpr Tuple3() = default;
 
     WAK_CPU_GPU
@@ -298,7 +296,6 @@ struct Tuple4
 {
     static const int32 dimensions = 4;
 
-    WAK_CPU_GPU
     constexpr Tuple4() = default;
 
     WAK_CPU_GPU

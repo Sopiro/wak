@@ -12,7 +12,6 @@ struct Transform
     Quat q; // orientation
     Vec3 s; // scale
 
-    WAK_CPU_GPU
     constexpr Transform() = default;
 
     WAK_CPU_GPU
