@@ -14,3 +14,11 @@
 #define WAK_GPU
 #define WAK_CPU_GPU
 #endif
+
+template <typename T>
+WAK_CPU_GPU inline void Swap(T& a, T& b)
+{
+    T tmp = std::move(a);
+    a = std::move(b);
+    b = std::move(tmp);
+}

@@ -21,7 +21,7 @@ WAK_CPU_GPU constexpr inline T Sqr(T v)
 
 WAK_CPU_GPU inline Float SafeSqrt(Float x)
 {
-    return std::sqrt(std::max<Float>(0, x));
+    return ::sqrt(::fmax(Float(0), x));
 }
 
 template <typename T>
