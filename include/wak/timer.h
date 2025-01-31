@@ -10,11 +10,15 @@ class Timer
     using clock = std::chrono::steady_clock;
 
 public:
+    WAK_CPU_GPU
     Timer();
 
+    WAK_CPU_GPU
     void Mark();
+    WAK_CPU_GPU
     void Reset();
 
+    WAK_CPU_GPU
     double Get();
 
 private:
@@ -23,17 +27,20 @@ private:
     size_t ptr;
 };
 
+WAK_CPU_GPU
 inline Timer::Timer()
     : ptr{ 0 }
 {
     Mark();
 }
 
+WAK_CPU_GPU
 inline void Timer::Mark()
 {
     time_points.push_back(clock::now());
 }
 
+WAK_CPU_GPU
 inline void Timer::Reset()
 {
     time_points.clear();
@@ -41,6 +48,7 @@ inline void Timer::Reset()
     ptr = 0;
 }
 
+WAK_CPU_GPU
 inline double Timer::Get()
 {
     if (ptr < time_points.size() - 1)

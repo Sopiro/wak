@@ -12,8 +12,10 @@ struct Transform
     Quat q; // orientation
     Vec3 s; // scale
 
+    WAK_CPU_GPU
     constexpr Transform() = default;
 
+    WAK_CPU_GPU
     constexpr Transform(Identity)
         : p{ 0 }
         , q{ identity }
@@ -21,6 +23,7 @@ struct Transform
     {
     }
 
+    WAK_CPU_GPU
     constexpr Transform(const Vec3& position)
         : p{ position }
         , q{ identity }
@@ -28,6 +31,7 @@ struct Transform
     {
     }
 
+    WAK_CPU_GPU
     constexpr Transform(const Quat& orientation)
         : p{ 0 }
         , q{ orientation }
@@ -35,6 +39,7 @@ struct Transform
     {
     }
 
+    WAK_CPU_GPU
     constexpr Transform(const Vec3& position, const Quat& orientation)
         : p{ position }
         , q{ orientation }
@@ -42,6 +47,7 @@ struct Transform
     {
     }
 
+    WAK_CPU_GPU
     constexpr Transform(const Vec3& position, const Quat& orientation, const Vec3& scale)
         : p{ position }
         , q{ orientation }
@@ -49,6 +55,7 @@ struct Transform
     {
     }
 
+    WAK_CPU_GPU
     constexpr Transform(Float x, Float y, Float z, const Quat& orientation = Quat(1), const Vec3& scale = Vec3(1))
         : p{ x, y, z }
         , q{ orientation }
@@ -56,6 +63,7 @@ struct Transform
     {
     }
 
+    WAK_CPU_GPU
     Transform(const Mat4& m)
     {
         s.x = std::sqrt(m[0][0] * m[0][0] + m[1][0] * m[1][0] + m[2][0] * m[2][0]);
@@ -71,6 +79,7 @@ struct Transform
         p.z = m[3][2];
     }
 
+    WAK_CPU_GPU
     constexpr void Set(const Vec3& position, const Quat& orientation, const Vec3& scale)
     {
         p = position;
@@ -78,6 +87,7 @@ struct Transform
         s = scale;
     }
 
+    WAK_CPU_GPU
     constexpr void SetIdentity()
     {
         p.SetZero();
@@ -85,48 +95,57 @@ struct Transform
         s.Set(1, 1, 1);
     }
 
+    WAK_CPU_GPU
     constexpr Transform& operator*=(const Transform& other);
 
+    WAK_CPU_GPU
     constexpr Transform GetInverse() const
     {
         return Transform{ q.RotateInv(-p), q.GetConjugate(), 1 / s };
     }
 };
 
+WAK_CPU_GPU
 constexpr inline bool operator==(const Transform& a, const Transform& b)
 {
     return a.p == b.p && a.q == b.q;
 }
 
+WAK_CPU_GPU
 constexpr inline Vec3 operator*(const Transform& t, const Vec3& v)
 {
     return t.q.Rotate(t.s * v) + t.p;
 }
 
 // A * V
+WAK_CPU_GPU
 constexpr inline Vec3 Mul(const Transform& t, const Vec3& v)
 {
     return t.q.Rotate(t.s * v) + t.p;
 }
 
 // A^T * V
+WAK_CPU_GPU
 constexpr inline Vec3 MulT(const Transform& t, const Vec3& v)
 {
     return t.q.RotateInv(Float(1) / t.s * v - t.p);
 }
 
+WAK_CPU_GPU
 constexpr inline Transform operator*(const Transform& a, const Transform& b)
 {
     return Transform{ a.q.Rotate(b.p) + a.p, a.q * b.q, a.s * b.s };
 }
 
 // A * B
+WAK_CPU_GPU
 constexpr inline Transform Mul(const Transform& a, const Transform& b)
 {
     return Transform{ a.q.Rotate(b.p) + a.p, a.q * b.q, a.s * b.s };
 }
 
 // A^T * B
+WAK_CPU_GPU
 constexpr inline Transform MulT(const Transform& a, const Transform& b)
 {
     Quat invQ = a.q.GetConjugate();
@@ -134,6 +153,7 @@ constexpr inline Transform MulT(const Transform& a, const Transform& b)
     return Transform{ invQ.Rotate(b.p - a.p), invQ * b.q, (1 / a.s) * b.s };
 }
 
+WAK_CPU_GPU
 constexpr inline Transform& Transform::operator*=(const Transform& other)
 {
     *this = Mul(*this, other);

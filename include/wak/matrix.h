@@ -18,41 +18,49 @@ struct Mat2
 {
     Vec2 ex, ey;
 
+    WAK_CPU_GPU
     constexpr Mat2() = default;
 
+    WAK_CPU_GPU
     constexpr Mat2(Identity)
         : Mat2(1)
     {
     }
 
+    WAK_CPU_GPU
     constexpr explicit Mat2(Float v)
         : ex{ v, 0 }
         , ey{ 0, v }
     {
     }
 
+    WAK_CPU_GPU
     constexpr explicit Mat2(const Vec2& v)
         : ex{ v.x, 0 }
         , ey{ 0, v.y }
     {
     }
 
+    WAK_CPU_GPU
     constexpr Mat2(const Vec2& c1, const Vec2& c2)
         : ex{ c1 }
         , ey{ c2 }
     {
     }
 
+    WAK_CPU_GPU
     Vec2& operator[](int32 i)
     {
         return (&ex)[i];
     }
 
+    WAK_CPU_GPU
     const Vec2& operator[](int32 i) const
     {
         return (&ex)[i];
     }
 
+    WAK_CPU_GPU
     constexpr void SetIdentity()
     {
         // clang-format off
@@ -61,6 +69,7 @@ struct Mat2
         // clang-format on
     }
 
+    WAK_CPU_GPU
     constexpr void SetZero()
     {
         // clang-format off
@@ -69,6 +78,7 @@ struct Mat2
         // clang-format on
     }
 
+    WAK_CPU_GPU
     constexpr Mat2 GetTranspose() const
     {
         Mat2 t;
@@ -81,6 +91,7 @@ struct Mat2
         return t;
     }
 
+    WAK_CPU_GPU
     constexpr Mat2 GetInverse() const
     {
         Mat2 t;
@@ -99,6 +110,7 @@ struct Mat2
         return t;
     }
 
+    WAK_CPU_GPU
     constexpr Float GetDeterminant() const
     {
         return ex.x * ey.y - ey.x * ex.y;
@@ -114,13 +126,16 @@ struct Mat3
 {
     Vec3 ex, ey, ez;
 
+    WAK_CPU_GPU
     constexpr Mat3() = default;
 
+    WAK_CPU_GPU
     constexpr Mat3(Identity)
         : Mat3(1)
     {
     }
 
+    WAK_CPU_GPU
     constexpr explicit Mat3(Float v)
         : ex{ v, 0, 0 }
         , ey{ 0, v, 0 }
@@ -128,6 +143,7 @@ struct Mat3
     {
     }
 
+    WAK_CPU_GPU
     constexpr explicit Mat3(const Vec3& v)
         : ex{ v.x, 0, 0 }
         , ey{ 0, v.y, 0 }
@@ -135,6 +151,7 @@ struct Mat3
     {
     }
 
+    WAK_CPU_GPU
     constexpr Mat3(const Vec3& c1, const Vec3& c2, const Vec3& c3)
         : ex{ c1 }
         , ey{ c2 }
@@ -142,18 +159,22 @@ struct Mat3
     {
     }
 
+    WAK_CPU_GPU
     Mat3(const Quat& q);
 
+    WAK_CPU_GPU
     Vec3& operator[](int32 i)
     {
         return (&ex)[i];
     }
 
+    WAK_CPU_GPU
     const Vec3& operator[](int32 i) const
     {
         return (&ex)[i];
     }
 
+    WAK_CPU_GPU
     constexpr void SetIdentity()
     {
         // clang-format off
@@ -163,6 +184,7 @@ struct Mat3
         // clang-format on
     }
 
+    WAK_CPU_GPU
     constexpr void SetZero()
     {
         // clang-format off
@@ -172,6 +194,7 @@ struct Mat3
         // clang-format on
     }
 
+    WAK_CPU_GPU
     constexpr Mat3 GetTranspose() const
     {
         Mat3 t;
@@ -185,11 +208,12 @@ struct Mat3
         return t;
     }
 
+    WAK_CPU_GPU
     constexpr Mat3 GetInverse() const;
 
-    Mat3 Scale(const Vec2& scale) const;
-    Mat3 Rotate(Float rotation) const;
-    Mat3 Translate(const Vec2& translation) const;
+    WAK_CPU_GPU Mat3 Scale(const Vec2& scale) const;
+    WAK_CPU_GPU Mat3 Rotate(Float rotation) const;
+    WAK_CPU_GPU Mat3 Translate(const Vec2& translation) const;
 
     std::string ToString() const
     {
@@ -203,13 +227,16 @@ struct Mat4
 {
     Vec4 ex, ey, ez, ew;
 
+    WAK_CPU_GPU
     constexpr Mat4() = default;
 
+    WAK_CPU_GPU
     constexpr Mat4(Identity)
         : Mat4(1)
     {
     }
 
+    WAK_CPU_GPU
     constexpr explicit Mat4(Float v)
         : ex{ v, 0, 0, 0 }
         , ey{ 0, v, 0, 0 }
@@ -218,6 +245,7 @@ struct Mat4
     {
     }
 
+    WAK_CPU_GPU
     constexpr explicit Mat4(const Vec4& v)
         : ex{ v.x, 0, 0, 0 }
         , ey{ 0, v.y, 0, 0 }
@@ -226,6 +254,7 @@ struct Mat4
     {
     }
 
+    WAK_CPU_GPU
     constexpr Mat4(const Vec4& c1, const Vec4& c2, const Vec4& c3, const Vec4& c4)
         : ex{ c1 }
         , ey{ c2 }
@@ -234,6 +263,7 @@ struct Mat4
     {
     }
 
+    WAK_CPU_GPU
     constexpr Mat4(const Mat3& r, const Vec3& p)
         : ex{ r.ex, 0 }
         , ey{ r.ey, 0 }
@@ -242,18 +272,22 @@ struct Mat4
     {
     }
 
+    WAK_CPU_GPU
     Mat4(const Transform& t);
 
+    WAK_CPU_GPU
     Vec4& operator[](int32 i)
     {
         return (&ex)[i];
     }
 
+    WAK_CPU_GPU
     const Vec4& operator[](int32 i) const
     {
         return (&ex)[i];
     }
 
+    WAK_CPU_GPU
     constexpr void SetIdentity()
     {
         // clang-format off
@@ -264,6 +298,7 @@ struct Mat4
         // clang-format on
     }
 
+    WAK_CPU_GPU
     constexpr void SetZero()
     {
         // clang-format off
@@ -274,6 +309,7 @@ struct Mat4
         // clang-format on
     }
 
+    WAK_CPU_GPU
     constexpr Mat4 GetTranspose() const
     {
         Mat4 t;
@@ -288,14 +324,15 @@ struct Mat4
         return t;
     }
 
+    WAK_CPU_GPU
     constexpr Mat4 GetInverse() const;
 
-    Mat4 Scale(const Vec3& scale) const;
-    Mat4 Rotate(const Vec3& euler_rotation) const;
-    Mat4 Translate(const Vec3& translation) const;
+    WAK_CPU_GPU Mat4 Scale(const Vec3& scale) const;
+    WAK_CPU_GPU Mat4 Rotate(const Vec3& euler_rotation) const;
+    WAK_CPU_GPU Mat4 Translate(const Vec3& translation) const;
 
-    static Mat4 Orth(Float left, Float right, Float bottom, Float top, Float z_near, Float z_far);
-    static Mat4 Perspective(Float vertical_fov, Float aspect_ratio, Float z_near, Float z_far);
+    WAK_CPU_GPU static Mat4 Orth(Float left, Float right, Float bottom, Float top, Float z_near, Float z_far);
+    WAK_CPU_GPU static Mat4 Perspective(Float vertical_fov, Float aspect_ratio, Float z_near, Float z_far);
 
     std::string ToString() const
     {
@@ -308,30 +345,35 @@ struct Mat4
 
 // Mat2 inline functions begin
 
+WAK_CPU_GPU
 constexpr inline Mat2 operator+(const Mat2& a, const Mat2& b)
 {
     return Mat2(a.ex + b.ex, a.ey + b.ey);
 }
 
 // M * V
+WAK_CPU_GPU
 constexpr inline Vec2 Mul(const Mat2& m, const Vec2& v)
 {
     return Vec2(m.ex.x * v.x + m.ey.x * v.y, m.ex.y * v.x + m.ey.y * v.y);
 }
 
 // M^T * V
+WAK_CPU_GPU
 constexpr inline Vec2 MulT(const Mat2& m, const Vec2& v)
 {
     return Vec2(Dot(m.ex, v), Dot(m.ey, v));
 }
 
 // A * B
+WAK_CPU_GPU
 constexpr inline Mat2 Mul(const Mat2& a, const Mat2& b)
 {
     return Mat2(Mul(a, b.ex), Mul(a, b.ey));
 }
 
 // A^T * B
+WAK_CPU_GPU
 constexpr inline Mat2 MulT(const Mat2& a, const Mat2& b)
 {
     Vec2 c1(Dot(a.ex, b.ex), Dot(a.ey, b.ex));
@@ -344,6 +386,7 @@ constexpr inline Mat2 MulT(const Mat2& a, const Mat2& b)
 // Mat3 functions begin
 
 // M * V
+WAK_CPU_GPU
 constexpr inline Vec3 Mul(const Mat3& m, const Vec3& v)
 {
     return Vec3{
@@ -354,18 +397,21 @@ constexpr inline Vec3 Mul(const Mat3& m, const Vec3& v)
 }
 
 // M^T * V
+WAK_CPU_GPU
 constexpr inline Vec3 MulT(const Mat3& m, const Vec3& v)
 {
     return Vec3(Dot(m.ex, v), Dot(m.ey, v), Dot(m.ez, v));
 }
 
 // A * B
+WAK_CPU_GPU
 constexpr inline Mat3 Mul(const Mat3& a, const Mat3& b)
 {
     return Mat3(Mul(a, b.ex), Mul(a, b.ey), Mul(a, b.ez));
 }
 
 // A^T * B
+WAK_CPU_GPU
 constexpr inline Mat3 MulT(const Mat3& a, const Mat3& b)
 {
     Vec3 c1(Dot(a.ex, b.ex), Dot(a.ey, b.ex), Dot(a.ez, b.ex));
@@ -375,6 +421,7 @@ constexpr inline Mat3 MulT(const Mat3& a, const Mat3& b)
     return Mat3(c1, c2, c3);
 }
 
+WAK_CPU_GPU
 constexpr inline Mat3 Mat3::GetInverse() const
 {
     Mat3 t;
@@ -399,6 +446,7 @@ constexpr inline Mat3 Mat3::GetInverse() const
     return t;
 }
 
+WAK_CPU_GPU
 inline Mat3 Mat3::Scale(const Vec2& scale) const
 {
     Mat3 t{ identity };
@@ -409,6 +457,7 @@ inline Mat3 Mat3::Scale(const Vec2& scale) const
     return Mul(*this, t);
 }
 
+WAK_CPU_GPU
 inline Mat3 Mat3::Rotate(Float rotation) const
 {
     Float s = std::sin(rotation);
@@ -425,6 +474,7 @@ inline Mat3 Mat3::Rotate(Float rotation) const
     return Mul(*this, t);
 }
 
+WAK_CPU_GPU
 inline Mat3 Mat3::Translate(const Vec2& translation) const
 {
     Mat3 t{ identity };
@@ -440,6 +490,7 @@ inline Mat3 Mat3::Translate(const Vec2& translation) const
 // Mat4 functions begin
 
 // M * V
+WAK_CPU_GPU
 constexpr inline Vec4 Mul(const Mat4& m, const Vec4& v)
 {
     return Vec4{
@@ -451,18 +502,21 @@ constexpr inline Vec4 Mul(const Mat4& m, const Vec4& v)
 }
 
 // M^T * V
+WAK_CPU_GPU
 constexpr inline Vec4 MulT(const Mat4& m, const Vec4& v)
 {
     return Vec4(Dot(m.ex, v), Dot(m.ey, v), Dot(m.ez, v), Dot(m.ew, v));
 }
 
 // A * B
+WAK_CPU_GPU
 constexpr inline Mat4 Mul(const Mat4& a, const Mat4& b)
 {
     return Mat4(Mul(a, b.ex), Mul(a, b.ey), Mul(a, b.ez), Mul(a, b.ew));
 }
 
 // A^T * B
+WAK_CPU_GPU
 constexpr inline Mat4 MulT(const Mat4& a, const Mat4& b)
 {
     Vec4 c1(Dot(a.ex, b.ex), Dot(a.ey, b.ex), Dot(a.ez, b.ex), Dot(a.ew, b.ex));
@@ -473,6 +527,7 @@ constexpr inline Mat4 MulT(const Mat4& a, const Mat4& b)
     return Mat4(c1, c2, c3, c4);
 }
 
+WAK_CPU_GPU
 constexpr inline Mat4 Mat4::GetInverse() const
 {
     Float a2323 = ez.z * ew.w - ez.w * ew.z;
@@ -524,6 +579,7 @@ constexpr inline Mat4 Mat4::GetInverse() const
     return t;
 }
 
+WAK_CPU_GPU
 inline Mat4 Mat4::Scale(const Vec3& s) const
 {
     Mat4 t{ identity };
@@ -535,6 +591,7 @@ inline Mat4 Mat4::Scale(const Vec3& s) const
     return Mul(*this, t);
 }
 
+WAK_CPU_GPU
 inline Mat4 Mat4::Rotate(const Vec3& r) const
 {
     Float sinX = std::sin(r.x);
@@ -569,6 +626,7 @@ inline Mat4 Mat4::Rotate(const Vec3& r) const
     return Mul(*this, t);
 }
 
+WAK_CPU_GPU
 inline Mat4 Mat4::Translate(const Vec3& v) const
 {
     Mat4 t{ identity };
@@ -580,6 +638,7 @@ inline Mat4 Mat4::Translate(const Vec3& v) const
     return Mul(*this, t);
 }
 
+WAK_CPU_GPU
 inline Mat4 Mat4::Orth(Float left, Float right, Float bottom, Float top, Float z_near, Float z_far)
 {
     Mat4 t{ identity };
@@ -597,6 +656,7 @@ inline Mat4 Mat4::Orth(Float left, Float right, Float bottom, Float top, Float z
     return t;
 }
 
+WAK_CPU_GPU
 inline Mat4 Mat4::Perspective(Float vertical_fov, Float aspect_ratio, Float z_near, Float z_far)
 {
     Mat4 t{ identity };

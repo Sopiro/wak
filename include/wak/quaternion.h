@@ -8,13 +8,16 @@ namespace wak
 
 struct Quat
 {
+    WAK_CPU_GPU
     constexpr Quat() = default;
 
+    WAK_CPU_GPU
     constexpr Quat(Identity)
         : Quat(1)
     {
     }
 
+    WAK_CPU_GPU
     constexpr Quat(Float x, Float y, Float z, Float w)
         : x{ x }
         , y{ y }
@@ -23,6 +26,7 @@ struct Quat
     {
     }
 
+    WAK_CPU_GPU
     explicit constexpr Quat(Float w)
         : x{ 0 }
         , y{ 0 }
@@ -31,6 +35,7 @@ struct Quat
     {
     }
 
+    WAK_CPU_GPU
     Quat(const Mat3& m)
     {
         // https://math.stackexchange.com/questions/893984/conversion-of-rotation-matrix-to-quaternion
@@ -62,6 +67,7 @@ struct Quat
         }
     }
 
+    WAK_CPU_GPU
     Quat(const Vec3& front, const Vec3& up)
     {
         Mat3 rotation;
@@ -75,6 +81,7 @@ struct Quat
     }
 
     // Axis must be normalized
+    WAK_CPU_GPU
     Quat(Float angle, const Vec3& unitAxis)
     {
         Float halg_angle = angle * 0.5f;
@@ -86,31 +93,37 @@ struct Quat
         w = std::cos(halg_angle);
     }
 
+    WAK_CPU_GPU
     constexpr Quat operator-() const
     {
         return Quat(-x, -y, -z, -w);
     }
 
+    WAK_CPU_GPU
     constexpr Quat operator*(Float s) const
     {
         return Quat(x * s, y * s, z * s, w * s);
     }
 
+    WAK_CPU_GPU
     constexpr bool IsIdentity() const
     {
         return x == 0 && y == 0 && z == 0 && w == 1;
     }
 
+    WAK_CPU_GPU
     constexpr Float Length2() const
     {
         return x * x + y * y + z * z + w * w;
     }
 
+    WAK_CPU_GPU
     Float Length() const
     {
         return std::sqrt(Length2());
     }
 
+    WAK_CPU_GPU
     Float Normalize()
     {
         Float length = Length();
@@ -128,17 +141,20 @@ struct Quat
         return length;
     }
 
+    WAK_CPU_GPU
     constexpr Quat GetConjugate() const
     {
         return Quat(-x, -y, -z, w);
     }
 
+    WAK_CPU_GPU
     constexpr Vec3 GetImaginaryPart() const
     {
         return Vec3(x, y, z);
     }
 
     // Optimized qvq'
+    WAK_CPU_GPU
     constexpr Vec3 Rotate(const Vec3& v) const
     {
         Float vx = 2 * v.x;
@@ -154,6 +170,7 @@ struct Quat
         );
     }
 
+    WAK_CPU_GPU
     constexpr Vec3 RotateInv(const Vec3& v) const
     {
         Float vx = 2 * v.x;
@@ -169,6 +186,7 @@ struct Quat
         );
     }
 
+    WAK_CPU_GPU
     constexpr void SetIdentity()
     {
         x = 0;
@@ -178,6 +196,7 @@ struct Quat
     }
 
     // Computes rotation of x-axis
+    WAK_CPU_GPU
     constexpr Vec3 GetBasisX() const
     {
         Float x2 = x * 2;
@@ -187,6 +206,7 @@ struct Quat
     }
 
     // Computes rotation of y-axis
+    WAK_CPU_GPU
     constexpr Vec3 GetBasisY() const
     {
         Float y2 = y * 2;
@@ -196,6 +216,7 @@ struct Quat
     }
 
     // Computes rotation of z-axis
+    WAK_CPU_GPU
     constexpr Vec3 GetBasisZ() const
     {
         Float z2 = z * 2;
@@ -204,6 +225,7 @@ struct Quat
         return Vec3((y * w2) + x * z2, (-x * w2) + y * z2, (w * w2) - 1 + z * z2);
     }
 
+    WAK_CPU_GPU
     Vec3 ToEuler() const
     {
         // Roll (x-axis)
@@ -231,6 +253,7 @@ struct Quat
         return Vec3{ roll, pitch, yaw };
     }
 
+    WAK_CPU_GPU
     static Quat FromEuler(const Vec3& euler_angles)
     {
         Float cr = std::cos(euler_angles.x * 0.5f);
@@ -259,17 +282,20 @@ struct Quat
 
 // Quat inline functions begin
 
+WAK_CPU_GPU
 constexpr inline bool operator==(const Quat& a, const Quat& b)
 {
     return a.x == b.x && a.y == b.y && a.z == b.z && a.w == b.w;
 }
 
+WAK_CPU_GPU
 constexpr inline Float Dot(const Quat& a, const Quat& b)
 {
     return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
 
 // Quaternion multiplication
+WAK_CPU_GPU
 constexpr inline Quat operator*(const Quat& a, const Quat& b)
 {
     // clang-format off
@@ -280,17 +306,20 @@ constexpr inline Quat operator*(const Quat& a, const Quat& b)
     // clang-format on
 }
 
+WAK_CPU_GPU
 constexpr inline Quat operator+(const Quat& a, const Quat& b)
 {
     return Quat(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
 }
 
+WAK_CPU_GPU
 constexpr inline Quat operator-(const Quat& a, const Quat& b)
 {
     return Quat(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
 }
 
 // Compute angle between two quaternions
+WAK_CPU_GPU
 inline Float Angle(const Quat& a, const Quat& b)
 {
     return std::acos(Dot(a, b)) * 2;

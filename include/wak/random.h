@@ -9,12 +9,14 @@ namespace wak
 class RNG
 {
 public:
+    WAK_CPU_GPU
     RNG()
         : state{ pcg32_default_state }
         , inc{ pcg32_default_stream }
     {
     }
 
+    WAK_CPU_GPU
     RNG(uint64 initstate, uint64 initseq = 1)
     {
         Seed(initstate, initseq);
@@ -24,6 +26,7 @@ public:
     // pcg32_srandom_r(rng, initstate, initseq):
     //     Seed the rng.  Specified in two parts, state initializer and a
     //     sequence selection constant (a.k.a. stream id)
+    WAK_CPU_GPU
     void Seed(uint64 initstate, uint64 initseq = 1)
     {
         state = 0U;
@@ -36,6 +39,7 @@ public:
     // pcg32_random()
     // pcg32_random_r(rng)
     //     Generate a uniformly distributed 32-bit random number
+    WAK_CPU_GPU
     uint32 NextUint()
     {
         uint64 oldstate = state;
@@ -48,6 +52,7 @@ public:
     // pcg32_boundedrand(bound):
     // pcg32_boundedrand_r(rng, bound):
     //     Generate a uniformly distributed number, r, where 0 <= r < bound
+    WAK_CPU_GPU
     uint32 NextUint(uint32 bound)
     {
         // To avoid bias, we need to make the range of the RNG a multiple of
@@ -84,11 +89,13 @@ public:
     }
 
     // [0, 1)
+    WAK_CPU_GPU
     Float NextFloat()
     {
         return std::fmin(1 - epsilon, Float(NextUint() * 0x1p-32f));
     }
 
+    WAK_CPU_GPU
     void Advance(int64_t idelta)
     {
         uint64_t delta = (uint64_t)idelta;

@@ -4,6 +4,7 @@
 namespace wak
 {
 
+WAK_CPU_GPU
 Mat3::Mat3(const Quat& q)
 {
     Float xx = q.x * q.x;
@@ -29,6 +30,7 @@ Mat3::Mat3(const Quat& q)
     ez.z = 1 - 2 * (xx + yy);
 }
 
+WAK_CPU_GPU
 Mat4::Mat4(const Transform& t)
     : Mat4(Mat3(t.q), t.p)
 {

@@ -13,6 +13,7 @@ namespace wak
 {
 
 // https://github.com/explosion/murmurhash/blob/master/murmurhash/MurmurHash2.cpp
+WAK_CPU_GPU
 inline uint64_t MurmurHash64A(const unsigned char* key, size_t len, uint64_t seed)
 {
     const uint64_t m = 0xc6a4a7935bd1e995ull;
@@ -70,8 +71,10 @@ inline uint64_t MurmurHash64A(const unsigned char* key, size_t len, uint64_t see
 
 // Hashing Inline Functions
 // http://zimbry.blogspot.ch/2011/09/better-bit-mixing-improving-on.html
+WAK_CPU_GPU
 inline uint64_t MixBits(uint64_t v);
 
+WAK_CPU_GPU
 inline uint64_t MixBits(uint64_t v)
 {
     v ^= (v >> 31);
@@ -82,24 +85,29 @@ inline uint64_t MixBits(uint64_t v)
     return v;
 }
 
+WAK_CPU_GPU
 template <typename T>
 inline uint64_t HashBuffer(const T* ptr, size_t size, uint64_t seed = 0)
 {
     return MurmurHash64A((const unsigned char*)ptr, size, seed);
 }
 
+WAK_CPU_GPU
 template <typename... Args>
 inline uint64_t Hash(Args... args);
 
+WAK_CPU_GPU
 template <typename... Args>
 inline void hashRecursiveCopy(char* buf, Args...);
 
+WAK_CPU_GPU
 template <>
 inline void hashRecursiveCopy(char* buf)
 {
     WakNotUsed(buf);
 }
 
+WAK_CPU_GPU
 template <typename T, typename... Args>
 inline void hashRecursiveCopy(char* buf, T v, Args... args)
 {
@@ -107,6 +115,7 @@ inline void hashRecursiveCopy(char* buf, T v, Args... args)
     hashRecursiveCopy(buf + sizeof(T), args...);
 }
 
+WAK_CPU_GPU
 template <typename... Args>
 inline uint64_t Hash(Args... args)
 {
@@ -118,12 +127,14 @@ inline uint64_t Hash(Args... args)
     return MurmurHash64A((const unsigned char*)buf, sz, 0);
 }
 
+WAK_CPU_GPU
 template <typename... Args>
 inline float HashFloat(Args... args)
 {
     return uint32_t(Hash(args...)) * 0x1p-32f;
 }
 
+WAK_CPU_GPU
 // https://www.pbr-book.org/4ed/Utilities/Mathematical_Infrastructure#sec:hashing-and-permutations
 inline int PermutationElement(uint32_t i, uint32_t l, uint32_t p)
 {
