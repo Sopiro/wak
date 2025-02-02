@@ -25,7 +25,7 @@ WAK_CPU_GPU inline uint64_t MurmurHash64A(const unsigned char* key, size_t len, 
     while (key != end)
     {
         uint64_t k;
-        std::memcpy(&k, key, sizeof(uint64_t));
+        memcpy(&k, key, sizeof(uint64_t));
         key += 8;
 
         k *= m;
