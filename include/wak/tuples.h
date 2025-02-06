@@ -124,6 +124,25 @@ struct Tuple2
         return static_cast<Child<T>&>(*this);
     }
 
+    template <typename U>
+    WAK_CPU_GPU constexpr Child<T>& operator*=(Child<U> s)
+    {
+        WakAssert(!wak::IsNullish(s));
+        x *= s.x;
+        y *= s.y;
+        return static_cast<Child<T>&>(*this);
+    }
+
+    template <typename U>
+    WAK_CPU_GPU constexpr Child<T>& operator/=(Child<U> d)
+    {
+        WakAssert(d != 0);
+        WakAssert(!wak::IsNullish(d));
+        x /= d.x;
+        y /= d.y;
+        return static_cast<Child<T>&>(*this);
+    }
+
     WAK_CPU_GPU
     constexpr void SetZero()
     {
@@ -264,6 +283,26 @@ struct Tuple3
         x /= d;
         y /= d;
         z /= d;
+        return static_cast<Child<T>&>(*this);
+    }
+
+    template <typename U>
+    WAK_CPU_GPU constexpr Child<T>& operator*=(Child<U> s)
+    {
+        WakAssert(!wak::IsNullish(s));
+        x *= s.x;
+        y *= s.y;
+        z *= s.z;
+        return static_cast<Child<T>&>(*this);
+    }
+
+    template <typename U>
+    WAK_CPU_GPU constexpr Child<T>& operator/=(Child<U> d)
+    {
+        WakAssert(d != 0);
+        x /= d.x;
+        y /= d.y;
+        z /= d.z;
         return static_cast<Child<T>&>(*this);
     }
 
@@ -414,6 +453,28 @@ struct Tuple4
         y /= d;
         z /= d;
         w /= d;
+        return static_cast<Child<T>&>(*this);
+    }
+
+    template <typename U>
+    WAK_CPU_GPU constexpr Child<T>& operator*=(Child<U> s)
+    {
+        WakAssert(!wak::IsNullish(s));
+        x *= s.x;
+        y *= s.y;
+        z *= s.z;
+        w *= s.w;
+        return static_cast<Child<T>&>(*this);
+    }
+
+    template <typename U>
+    WAK_CPU_GPU constexpr Child<T>& operator/=(Child<U> d)
+    {
+        WakAssert(d != 0);
+        x /= d.x;
+        y /= d.y;
+        z /= d.z;
+        w /= d.w;
         return static_cast<Child<T>&>(*this);
     }
 
