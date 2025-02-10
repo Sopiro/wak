@@ -55,13 +55,13 @@ struct Vector2 : public Tuple2<Vector2, T>
     {
     }
 
-    void Negate()
+    WAK_CPU_GPU void Negate()
     {
         x = -x;
         y = -y;
     }
 
-    T Normalize()
+    WAK_CPU_GPU T Normalize()
     {
         T length = Length(*this);
         if (length < std::numeric_limits<T>::epsilon())
@@ -115,14 +115,14 @@ struct Vector3 : public Tuple3<Vector3, T>
     {
     }
 
-    void Negate()
+    WAK_CPU_GPU void Negate()
     {
         x = -x;
         y = -y;
         z = -z;
     }
 
-    T Normalize()
+    WAK_CPU_GPU T Normalize()
     {
         T length = Length(*this);
         if (length < std::numeric_limits<T>::epsilon())
@@ -178,7 +178,7 @@ struct Vector4 : public Tuple4<Vector4, T>
     {
     }
 
-    void Negate()
+    WAK_CPU_GPU void Negate()
     {
         x = -x;
         y = -y;
@@ -186,7 +186,7 @@ struct Vector4 : public Tuple4<Vector4, T>
         w = -w;
     }
 
-    T Normalize()
+    WAK_CPU_GPU T Normalize()
     {
         T length = Length(*this);
         if (length < std::numeric_limits<T>::epsilon())
