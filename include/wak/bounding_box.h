@@ -39,7 +39,9 @@ struct BoundingBox2
 
     WAK_CPU_GPU bool TestRay(const Ray& ray, Float t_min, Float t_max) const;
     WAK_CPU_GPU bool TestRay(Vec2 o, Float t_min, Float t_max, Vec2 inv_dir, const int is_neg_dir[2]) const;
-    WAK_CPU_GPU Float Intersect(const Ray& ray, Float t_min, Float t_max) const;
+    WAK_CPU_GPU bool Intersect(
+        const Ray& ray, Float t_min, Float t_max, Float* t_hit_min = nullptr, Float* t_hit_max = nullptr
+    ) const;
 
     WAK_CPU_GPU void ComputeBoundingCircle(Point2* center, T* radius) const;
 
@@ -209,31 +211,43 @@ WAK_CPU_GPU inline bool BoundingBox2<T>::TestRay(Vec2 o, Float t_min, Float t_ma
 }
 
 template <typename T>
-WAK_CPU_GPU inline Float BoundingBox2<T>::Intersect(const Ray& ray, Float t_min, Float t_max) const
+WAK_CPU_GPU inline bool BoundingBox2<T>::Intersect(
+    const Ray& ray, Float t_min, Float t_max, Float* t_hit_min, Float* t_hit_max
+) const
 {
     for (int32 axis = 0; axis < 2; ++axis)
     {
-        Float invD = 1 / ray.d[axis];
+        Float inv_d = 1 / ray.d[axis];
         Float origin = ray.o[axis];
 
-        Float t0 = (min[axis] - origin) * invD;
-        Float t1 = (max[axis] - origin) * invD;
+        Float t0 = (min[axis] - origin) * inv_d;
+        Float t1 = (max[axis] - origin) * inv_d;
 
-        if (invD < 0)
+        if (inv_d < 0)
         {
-            Swap(t0, t1);
+            std::swap(t0, t1);
         }
 
         t_min = t0 > t_min ? t0 : t_min;
         t_max = t1 < t_max ? t1 : t_max;
 
-        if (t_max <= t_min)
+        if (t_max < t_min)
         {
-            return infinity;
+            return false;
         }
     }
 
-    return t_min;
+    if (t_hit_min)
+    {
+        *t_hit_min = t_min;
+    }
+
+    if (t_hit_max)
+    {
+        *t_hit_max = t_max;
+    }
+
+    return true;
 }
 
 template <typename T>
@@ -269,7 +283,9 @@ struct BoundingBox3
     WAK_CPU_GPU bool TestOverlap(const BoundingBox3& other) const;
     WAK_CPU_GPU bool TestRay(const Ray& ray, Float t_min, Float t_max) const;
     WAK_CPU_GPU bool TestRay(Vec3 o, Float t_min, Float t_max, Vec3 inv_dir, const int is_neg_dir[3]) const;
-    WAK_CPU_GPU Float Intersect(const Ray& ray, Float t_min, Float t_max) const;
+    WAK_CPU_GPU bool Intersect(
+        const Ray& ray, Float t_min, Float t_max, Float* t_hit_min = nullptr, Float* t_hit_max = nullptr
+    ) const;
 
     WAK_CPU_GPU void ComputeBoundingSphere(Point3* center, T* radius) const;
 
@@ -453,31 +469,43 @@ WAK_CPU_GPU inline bool BoundingBox3<T>::TestRay(Vec3 o, Float t_min, Float t_ma
 }
 
 template <typename T>
-WAK_CPU_GPU inline Float BoundingBox3<T>::Intersect(const Ray& ray, Float t_min, Float t_max) const
+WAK_CPU_GPU inline bool BoundingBox3<T>::Intersect(
+    const Ray& ray, Float t_min, Float t_max, Float* t_hit_min, Float* t_hit_max
+) const
 {
     for (int32 axis = 0; axis < 3; ++axis)
     {
-        Float invD = 1 / ray.d[axis];
+        Float inv_d = 1 / ray.d[axis];
         Float origin = ray.o[axis];
 
-        Float t0 = (min[axis] - origin) * invD;
-        Float t1 = (max[axis] - origin) * invD;
+        Float t0 = (min[axis] - origin) * inv_d;
+        Float t1 = (max[axis] - origin) * inv_d;
 
-        if (invD < 0)
+        if (inv_d < 0)
         {
-            Swap(t0, t1);
+            std::swap(t0, t1);
         }
 
         t_min = t0 > t_min ? t0 : t_min;
         t_max = t1 < t_max ? t1 : t_max;
 
-        if (t_max <= t_min)
+        if (t_max < t_min)
         {
-            return infinity;
+            return false;
         }
     }
 
-    return t_min;
+    if (t_hit_min)
+    {
+        *t_hit_min = t_min;
+    }
+
+    if (t_hit_max)
+    {
+        *t_hit_max = t_max;
+    }
+
+    return true;
 }
 
 template <typename T>

@@ -32,12 +32,12 @@ WAK_CPU_GPU inline Point3 Ray::At(Float t) const
 
 WAK_CPU_GPU inline Ray Mul(const Transform& tf, const Ray& ray)
 {
-    return Ray(Mul(tf, ray.o), tf.q.Rotate(ray.d));
+    return Ray(Mul(tf, ray.o), tf.q.Rotate(tf.s * ray.d));
 }
 
 WAK_CPU_GPU inline Ray MulT(const Transform& tf, const Ray& ray)
 {
-    return Ray(MulT(tf, ray.o), tf.q.RotateInv(ray.d));
+    return Ray(MulT(tf, ray.o), tf.q.RotateInv(ray.d / tf.s));
 }
 
 } // namespace wak
