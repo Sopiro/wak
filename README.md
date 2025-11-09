@@ -12,7 +12,7 @@ include(FetchContent)
 FetchContent_Declare(
     wak
     GIT_REPOSITORY https://github.com/Sopiro/wak.git
-    GIT_TAG v1.0.0
+    GIT_TAG v1.1.0
 )
 
 FetchContent_MakeAvailable(wak)
