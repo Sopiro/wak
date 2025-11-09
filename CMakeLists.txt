@@ -1,6 +1,17 @@
 cmake_minimum_required(VERSION 3.27)
 
+include(FetchContent)
+
 project(wak LANGUAGES C CXX VERSION 0.0.1)
+
+# Download stb
+FetchContent_Declare(
+    stb
+    GIT_REPOSITORY https://github.com/nothings/stb.git
+    GIT_TAG ae721c50eaf761660b4f90cc590453cdb0c2acd0
+)
+
+FetchContent_MakeAvailable(stb)
 
 file(GLOB_RECURSE SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 file(GLOB_RECURSE HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/${PROJECT_NAME}/*.h)
@@ -13,6 +24,7 @@ target_precompile_headers(${PROJECT_NAME} PUBLIC
 
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${stb_SOURCE_DIR}
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -25,5 +37,5 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 if(MSVC)
     target_compile_options(${PROJECT_NAME} PRIVATE /W4 /WX)
 else()
-    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror -Wno-missing-field-initializers)
 endif()
