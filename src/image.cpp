@@ -211,7 +211,7 @@ Image4 ReadImage4(const std::filesystem::path& filename, bool non_color, std::fu
 }
 
 Image1u ReadImage1u(
-    const std::filesystem::path& filename, int32 channel, bool non_color, std::function<Image1::Type(Image1::Type)> transform
+    const std::filesystem::path& filename, int32 channel, bool non_color, std::function<Image1u::Type(Image1u::Type)> transform
 )
 {
     stbi_set_flip_vertically_on_load(true);
@@ -287,7 +287,7 @@ Image1u ReadImage1u(
     return image;
 }
 
-Image3u ReadImage3u(const std::filesystem::path& filename, bool non_color, std::function<Image3::Type(Image3::Type)> transform)
+Image3u ReadImage3u(const std::filesystem::path& filename, bool non_color, std::function<Image3u::Type(Image3u::Type)> transform)
 {
     stbi_set_flip_vertically_on_load(true);
     stbi_ldr_to_hdr_gamma(non_color ? 1.0f : 2.2f);
@@ -348,7 +348,7 @@ Image3u ReadImage3u(const std::filesystem::path& filename, bool non_color, std::
     return image;
 }
 
-Image4u ReadImage4u(const std::filesystem::path& filename, bool non_color, std::function<Image4::Type(Image4::Type)> transform)
+Image4u ReadImage4u(const std::filesystem::path& filename, bool non_color, std::function<Image4u::Type(Image4u::Type)> transform)
 {
     stbi_set_flip_vertically_on_load(true);
     stbi_ldr_to_hdr_gamma(non_color ? 1.0f : 2.2f);

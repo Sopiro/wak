@@ -90,13 +90,13 @@ Image1u ReadImage1u(
     const std::filesystem::path& filename,
     int32 channel,
     bool non_color = false,
-    std::function<Image1::Type(Image1::Type)> transform = {}
+    std::function<Image1u::Type(Image1u::Type)> transform = {}
 );
 Image3u ReadImage3u(
-    const std::filesystem::path& filename, bool non_color = false, std::function<Image3::Type(Image3::Type)> transform = {}
+    const std::filesystem::path& filename, bool non_color = false, std::function<Image3u::Type(Image3u::Type)> transform = {}
 );
 Image4u ReadImage4u(
-    const std::filesystem::path& filename, bool non_color = false, std::function<Image4::Type(Image4::Type)> transform = {}
+    const std::filesystem::path& filename, bool non_color = false, std::function<Image4u::Type(Image4u::Type)> transform = {}
 );
 
 using ImageWriteCallback = Vec3(const Vec3&);
