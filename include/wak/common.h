@@ -12,6 +12,7 @@
 #include <iostream>
 #include <latch>
 #include <mutex>
+#include <optional>
 #include <shared_mutex>
 #include <thread>
 
