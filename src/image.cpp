@@ -236,15 +236,11 @@ Image1u ReadImage1u(
         {
             if (transform)
             {
-                ParallelFor(0, width * height, [&](int32 i) {
-                    image[i] = transform(std::max<uint8>(uint8(0), data[stride * i + channel]));
-                });
+                ParallelFor(0, width * height, [&](int32 i) { image[i] = transform(data[stride * i + channel]); });
             }
             else
             {
-                ParallelFor(0, width * height, [&](int32 i) {
-                    image[i] = std::max<uint8>(uint8(0), data[stride * i + channel]);
-                });
+                ParallelFor(0, width * height, [&](int32 i) { image[i] = data[stride * i + channel]; });
             }
         }
         else
@@ -253,14 +249,14 @@ Image1u ReadImage1u(
             {
                 for (int32 i = 0; i < width * height; ++i)
                 {
-                    image[i] = transform(std::max<uint8>(uint8(0), data[stride * i + channel]));
+                    image[i] = transform(data[stride * i + channel]);
                 }
             }
             else
             {
                 for (int32 i = 0; i < width * height; ++i)
                 {
-                    image[i] = std::max<uint8>(uint8(0), data[stride * i + channel]);
+                    image[i] = data[stride * i + channel];
                 }
             }
         }
@@ -271,14 +267,14 @@ Image1u ReadImage1u(
         {
             for (int32 i = 0; i < width * height; ++i)
             {
-                image[i] = transform(Float(std::max<uint8>(uint8(0), data[stride * i + channel])));
+                image[i] = transform(data[stride * i + channel]);
             }
         }
         else
         {
             for (int32 i = 0; i < width * height; ++i)
             {
-                image[i] = Float(std::max<uint8>(uint8(0), data[stride * i + channel]));
+                image[i] = data[stride * i + channel];
             }
         }
     }
