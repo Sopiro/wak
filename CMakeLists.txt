@@ -24,6 +24,8 @@ target_precompile_headers(${PROJECT_NAME} PUBLIC
 
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
     ${stb_SOURCE_DIR}
 )
 
@@ -37,5 +39,5 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 if(MSVC)
     target_compile_options(${PROJECT_NAME} PRIVATE /W4 /WX)
 else()
-    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror -Wno-missing-field-initializers)
+    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror)
 endif()

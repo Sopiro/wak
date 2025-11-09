@@ -12,6 +12,7 @@
 #include <latch>
 #include <mutex>
 #include <shared_mutex>
+#include <thread>
 
 #ifdef __CUDACC__
 #define WAK_GPU __device__
