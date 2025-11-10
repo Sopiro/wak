@@ -15,7 +15,6 @@ Image1 ReadImage1(
     const std::filesystem::path& filename, int32 channel, bool non_color, std::function<Image1::Type(Image1::Type)> transform
 )
 {
-    stbi_set_flip_vertically_on_load(true);
     stbi_ldr_to_hdr_gamma(non_color ? 1.0f : 2.2f);
 
     int32 width, height;
@@ -88,7 +87,6 @@ Image1 ReadImage1(
 
 Image3 ReadImage3(const std::filesystem::path& filename, bool non_color, std::function<Image3::Type(Image3::Type)> transform)
 {
-    stbi_set_flip_vertically_on_load(true);
     stbi_ldr_to_hdr_gamma(non_color ? 1.0f : 2.2f);
 
     int32 width, height;
@@ -143,7 +141,6 @@ Image3 ReadImage3(const std::filesystem::path& filename, bool non_color, std::fu
 
 Image4 ReadImage4(const std::filesystem::path& filename, bool non_color, std::function<Image4::Type(Image4::Type)> transform)
 {
-    stbi_set_flip_vertically_on_load(true);
     stbi_ldr_to_hdr_gamma(non_color ? 1.0f : 2.2f);
 
     int32 width, height;
@@ -214,7 +211,6 @@ Image1u ReadImage1u(
     const std::filesystem::path& filename, int32 channel, bool non_color, std::function<Image1u::Type(Image1u::Type)> transform
 )
 {
-    stbi_set_flip_vertically_on_load(true);
     stbi_ldr_to_hdr_gamma(non_color ? 1.0f : 2.2f);
 
     int32 width, height;
@@ -285,7 +281,6 @@ Image1u ReadImage1u(
 
 Image3u ReadImage3u(const std::filesystem::path& filename, bool non_color, std::function<Image3u::Type(Image3u::Type)> transform)
 {
-    stbi_set_flip_vertically_on_load(true);
     stbi_ldr_to_hdr_gamma(non_color ? 1.0f : 2.2f);
 
     int32 width, height;
@@ -346,7 +341,6 @@ Image3u ReadImage3u(const std::filesystem::path& filename, bool non_color, std::
 
 Image4u ReadImage4u(const std::filesystem::path& filename, bool non_color, std::function<Image4u::Type(Image4u::Type)> transform)
 {
-    stbi_set_flip_vertically_on_load(true);
     stbi_ldr_to_hdr_gamma(non_color ? 1.0f : 2.2f);
 
     int32 width, height;
@@ -415,8 +409,6 @@ Image4u ReadImage4u(const std::filesystem::path& filename, bool non_color, std::
 
 void WriteImage(const Image3& image, const std::filesystem::path& filename, ImageWriteCallback* callback)
 {
-    stbi_flip_vertically_on_write(true);
-
     std::string extension = filename.extension().string();
     if (extension == ".hdr")
     {
@@ -466,8 +458,6 @@ void WriteImage(const Image3& image, const std::filesystem::path& filename, Imag
 
 void WriteImage(const Image1& image, const std::filesystem::path& filename, ImageWriteCallback* callback)
 {
-    stbi_flip_vertically_on_write(true);
-
     std::string extension = filename.extension().string();
     if (extension == ".hdr")
     {
@@ -517,8 +507,6 @@ void WriteImage(const Image1& image, const std::filesystem::path& filename, Imag
 
 void WriteImage(const Image3u& image, const std::filesystem::path& filename)
 {
-    stbi_flip_vertically_on_write(true);
-
     std::string extension = filename.extension().string();
     if (extension == ".jpg")
     {
@@ -537,8 +525,6 @@ void WriteImage(const Image3u& image, const std::filesystem::path& filename)
 
 void WriteImage(const Image1u& image, const std::filesystem::path& filename)
 {
-    stbi_flip_vertically_on_write(true);
-
     std::string extension = filename.extension().string();
     if (extension == ".jpg" || extension == ".png")
     {

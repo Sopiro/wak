@@ -170,8 +170,6 @@ Image3D3 ReadImage3D(
 
 void WriteImage3D(const Image3D1& image, const std::filesystem::path& filename)
 {
-    stbi_flip_vertically_on_write(true);
-
     std::string extension = filename.extension().string();
 
     if (extension == ".hdr")
@@ -187,8 +185,6 @@ void WriteImage3D(const Image3D1& image, const std::filesystem::path& filename)
 
 void WriteImage3D(const Image3D3& image, const std::filesystem::path& filename)
 {
-    stbi_flip_vertically_on_write(true);
-
     std::string extension = filename.extension().string();
 
     if (extension == ".hdr")
