@@ -363,7 +363,7 @@ Image4u ReadImage4u(const std::filesystem::path& filename, bool non_color, std::
             ParallelFor(0, width * height, [&](int32 i) {
                 image[i] = transform(
                     Max(Vector4<uint8>{ data[stride * i + 0], data[stride * i + 1], data[stride * i + 2],
-                                        (components_per_pixel == STBI_rgb_alpha ? data[stride * i + 3] : uint8(1)) },
+                                        (components_per_pixel == STBI_rgb_alpha ? data[stride * i + 3] : uint8(255)) },
                         Vector4<uint8>::zero)
                 );
             });
@@ -373,7 +373,7 @@ Image4u ReadImage4u(const std::filesystem::path& filename, bool non_color, std::
             ParallelFor(0, width * height, [&](int32 i) {
                 image[i] =
                     Max(Vector4<uint8>{ data[stride * i + 0], data[stride * i + 1], data[stride * i + 2],
-                                        (components_per_pixel == STBI_rgb_alpha ? data[stride * i + 3] : uint8(1)) },
+                                        (components_per_pixel == STBI_rgb_alpha ? data[stride * i + 3] : uint8(255)) },
                         Vector4<uint8>::zero);
             });
         }
@@ -386,7 +386,7 @@ Image4u ReadImage4u(const std::filesystem::path& filename, bool non_color, std::
             {
                 image[i] = transform(
                     Max(Vector4<uint8>{ data[stride * i + 0], data[stride * i + 1], data[stride * i + 2],
-                                        (components_per_pixel == STBI_rgb_alpha ? data[stride * i + 3] : uint8(1)) },
+                                        (components_per_pixel == STBI_rgb_alpha ? data[stride * i + 3] : uint8(255)) },
                         Vector4<uint8>::zero)
                 );
             }
@@ -397,7 +397,7 @@ Image4u ReadImage4u(const std::filesystem::path& filename, bool non_color, std::
             {
                 image[i] =
                     Max(Vector4<uint8>{ data[stride * i + 0], data[stride * i + 1], data[stride * i + 2],
-                                        (components_per_pixel == STBI_rgb_alpha ? data[stride * i + 3] : uint8(1)) },
+                                        (components_per_pixel == STBI_rgb_alpha ? data[stride * i + 3] : uint8(255)) },
                         Vector4<uint8>::zero);
             }
         }
