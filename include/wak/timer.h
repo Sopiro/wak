@@ -20,6 +20,8 @@ public:
 
     WAK_CPU_GPU
     double Get();
+    WAK_CPU_GPU
+    double Elapsed() const;
 
 private:
     std::vector<clock::time_point> time_points;
@@ -58,6 +60,13 @@ WAK_CPU_GPU inline double Timer::Get()
     {
         return 0;
     }
+}
+
+WAK_CPU_GPU inline double Timer::Elapsed() const
+{
+    clock::time_point t = clock::now();
+    std::chrono::duration<double> dt = t - time_points.back();
+    return dt.count();
 }
 
 } // namespace wak
