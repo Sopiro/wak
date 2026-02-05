@@ -8,6 +8,8 @@ namespace wak
 
 template <typename K, typename V, typename Hasher>
 class HashMapIterator;
+template <typename K, typename V, typename Hasher>
+class HashMapConstIterator;
 
 template <typename K, typename V, typename Hasher = std::hash<K>>
 class HashMap
@@ -210,6 +212,12 @@ public:
     }
 
     WAK_CPU_GPU
+    size_t Size() const
+    {
+        return occupied;
+    }
+
+    WAK_CPU_GPU
     HashMapIterator<K, V, Hasher> begin()
     {
         size_t first_index = 0;
@@ -226,8 +234,26 @@ public:
         return HashMapIterator<K, V, Hasher>(this, table.size());
     }
 
+    WAK_CPU_GPU
+    HashMapConstIterator<K, V, Hasher> begin() const
+    {
+        size_t first_index = 0;
+        while (first_index < table.size() && dists[first_index] == -1)
+        {
+            ++first_index;
+        }
+        return HashMapConstIterator<K, V, Hasher>(this, first_index);
+    }
+
+    WAK_CPU_GPU
+    HashMapConstIterator<K, V, Hasher> end() const
+    {
+        return HashMapConstIterator<K, V, Hasher>(this, table.size());
+    }
+
 private:
     friend class HashMapIterator<K, V, Hasher>;
+    friend class HashMapConstIterator<K, V, Hasher>;
 
     std::vector<Entry> table;
     std::vector<int32> dists; // probe segement lengths. -1 means empty.
@@ -354,6 +380,67 @@ public:
 
 private:
     HashMap<K, V, Hasher>* map;
+    size_t index;
+};
+
+template <typename K, typename V, typename Hasher>
+class HashMapConstIterator
+{
+public:
+    using Entry = typename HashMap<K, V, Hasher>::Entry;
+
+    WAK_CPU_GPU
+    HashMapConstIterator(const HashMap<K, V, Hasher>* map, size_t index)
+        : map{ map }
+        , index{ index }
+    {
+    }
+
+    WAK_CPU_GPU
+    HashMapConstIterator& operator++()
+    {
+        do
+        {
+            ++index;
+        } while (index < map->table.size() && map->dists[index] == -1);
+
+        return *this;
+    }
+
+    WAK_CPU_GPU
+    HashMapConstIterator operator++(int)
+    {
+        HashMapConstIterator old = *this;
+        operator++();
+        return old;
+    }
+
+    WAK_CPU_GPU
+    bool operator==(const HashMapConstIterator& iter) const
+    {
+        return index == iter.index && map == iter.map;
+    }
+
+    WAK_CPU_GPU
+    bool operator!=(const HashMapConstIterator& iter) const
+    {
+        return !(*this == iter);
+    }
+
+    WAK_CPU_GPU
+    const Entry& operator*() const
+    {
+        return map->table[index];
+    }
+
+    WAK_CPU_GPU
+    const Entry* operator->() const
+    {
+        return &map->table[index];
+    }
+
+private:
+    const HashMap<K, V, Hasher>* map;
     size_t index;
 };
 
