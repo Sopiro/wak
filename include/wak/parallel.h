@@ -1,13 +1,69 @@
 #pragma once
 
-#include "asserts.h"
 #include "common.h"
 #include "types.h"
+
+#if defined(_M_IX86) || defined(_M_X64)
+#include <intrin.h>
+#elif defined(__i386__) || defined(__x86_64__)
+#include <immintrin.h>
+#endif
 
 namespace wak
 {
 
 class ThreadPool;
+
+inline void Pause() noexcept
+{
+#if defined(_M_IX86) || defined(_M_X64) || defined(__i386__) || defined(__x86_64__)
+    _mm_pause();
+#elif defined(_M_ARM64) || defined(_M_ARM)
+    __yield();
+#elif defined(__aarch64__) || defined(__arm__)
+    asm volatile("yield" ::: "memory");
+#else
+    std::atomic_signal_fence(std::memory_order_seq_cst);
+#endif
+}
+
+class SpinLock
+{
+public:
+    void lock()
+    {
+        int spin = 1;
+
+        while (flag.test_and_set(std::memory_order_acquire))
+        {
+            while (flag.test(std::memory_order_relaxed))
+            {
+                for (int i = 0; i < spin; ++i)
+                {
+                    Pause();
+                }
+
+                if (spin < 64)
+                {
+                    spin *= 2;
+                }
+            }
+        }
+    }
+
+    bool try_lock()
+    {
+        return !flag.test_and_set(std::memory_order_acquire);
+    }
+
+    void unlock()
+    {
+        flag.clear(std::memory_order_release);
+    }
+
+private:
+    alignas(64) std::atomic_flag flag = ATOMIC_FLAG_INIT;
+};
 
 class ParallelJob
 {
@@ -15,11 +71,11 @@ public:
     virtual ~ParallelJob() = default;
 
     virtual bool HaveWork() const = 0;
-    virtual void RunStep(std::unique_lock<std::mutex>* lock) = 0;
+    virtual void RunStep(int32 worker_index) = 0;
 
     bool Finished() const
     {
-        return !HaveWork() && active_workers == 0;
+        return completed.load(std::memory_order_acquire);
     }
 
 protected:
@@ -28,7 +84,8 @@ protected:
 
 private:
     // Active threads working on this job
-    int32 active_workers = 0;
+    std::atomic<int32> active_workers = 0;
+    std::atomic_bool completed = false;
 
     // Links
     ParallelJob* prev = nullptr;
@@ -43,11 +100,12 @@ public:
     explicit ThreadPool(int32 worker_count);
     ~ThreadPool();
 
-    void WorkOrWait(std::unique_lock<std::mutex>* lock);
-    bool WorkOrReturn();
+    bool WorkOrReturn(int32 worker_index = 0);
 
-    std::unique_lock<std::mutex> AddJob(ParallelJob* job);
+    void AddJob(ParallelJob* job);
     void RemoveJob(ParallelJob* job);
+
+    bool SetSpinMode(bool enable);
 
     void ForEachThread(std::function<void(void)> func);
 
@@ -57,15 +115,54 @@ public:
     }
 
 private:
-    void Worker();
-
-    bool shutdown = false;
+    void Worker(int32 worker_index);
+    bool TryRunJob(int32 worker_index);
+    void WaitForNextJob(uint32 current_job);
 
     std::vector<std::thread> threads;
-    std::mutex mutex;
-    std::condition_variable job_list_condition;
 
+    std::atomic_bool shutdown = false;
+    std::atomic_bool spin_mode = false;
+
+    // Atomic counter for job update
+    std::atomic<uint32> current_job = 0;
+
+    SpinLock job_lock;
+    std::condition_variable_any job_list_condition;
     ParallelJob* job_list = nullptr;
+    ParallelJob* job_list_tail = nullptr;
+};
+
+class SpinScope
+{
+public:
+    SpinScope(ThreadPool* threadPool)
+        : threadPool{ threadPool }
+        , oldSpinMode{ false }
+    {
+        if (threadPool)
+        {
+            oldSpinMode = threadPool->SetSpinMode(true);
+        }
+    }
+
+    ~SpinScope()
+    {
+        Close();
+    }
+
+    void Close()
+    {
+        if (threadPool)
+        {
+            threadPool->SetSpinMode(oldSpinMode);
+            threadPool = nullptr;
+        }
+    }
+
+private:
+    ThreadPool* threadPool;
+    bool oldSpinMode;
 };
 
 template <typename T>
@@ -73,13 +170,13 @@ class ThreadLocal
 {
 public:
     ThreadLocal()
-        : hash_table{ 4 * std::thread::hardware_concurrency() }
+        : hash_table{ std::max<uint32>(4 * std::thread::hardware_concurrency(), 4) }
         , createFcn{ []() { return T(); } }
     {
     }
 
     ThreadLocal(std::function<T(void)> createFcn)
-        : hash_table{ 4 * std::thread::hardware_concurrency() }
+        : hash_table{ std::max<uint32>(4 * std::thread::hardware_concurrency(), 4) }
         , createFcn{ std::move(createFcn) }
     {
     }

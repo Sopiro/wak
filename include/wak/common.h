@@ -1,20 +1,21 @@
 #pragma once
 
-#include <assert.h>
-#include <math.h>
-#include <stdint.h>
-#include <string.h>
+#include <assert.h>           // IWYU pragma: export
+#include <chrono>             // IWYU pragma: export
+#include <cmath>              // IWYU pragma: export
+#include <condition_variable> // IWYU pragma: export
+#include <cstdint>            // IWYU pragma: export
+#include <cstring>            // IWYU pragma: export
+#include <filesystem>         // IWYU pragma: export
+#include <functional>         // IWYU pragma: export
+#include <iostream>           // IWYU pragma: export
+#include <latch>              // IWYU pragma: export
+#include <mutex>              // IWYU pragma: export
+#include <optional>           // IWYU pragma: export
+#include <shared_mutex>       // IWYU pragma: export
+#include <thread>             // IWYU pragma: export
 
-#include <chrono>
-#include <condition_variable>
-#include <filesystem>
-#include <functional>
-#include <iostream>
-#include <latch>
-#include <mutex>
-#include <optional>
-#include <shared_mutex>
-#include <thread>
+#include "types.h"            // IWYU pragma: export
 
 #ifdef __CUDACC__
 #define WAK_GPU __device__
@@ -24,10 +25,5 @@
 #define WAK_CPU_GPU
 #endif
 
-template <typename T>
-WAK_CPU_GPU inline void Swap(T& a, T& b)
-{
-    T tmp = std::move(a);
-    a = std::move(b);
-    b = std::move(tmp);
-}
+#define WakAssert(A) assert(A)
+#define WakNotUsed(x) ((void)(x))

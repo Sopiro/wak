@@ -34,9 +34,5 @@ WAK_CPU_GPU
 Mat4::Mat4(const Transform& t)
     : Mat4(Mat3(t.q), t.p)
 {
-    ex *= t.s.x;
-    ey *= t.s.y;
-    ez *= t.s.z;
 }
-
 } // namespace wak

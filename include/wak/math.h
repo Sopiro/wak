@@ -1,10 +1,10 @@
 #pragma once
 
-#include "floats.h"
-#include "matrix.h"
-#include "quaternion.h"
-#include "transform.h"
-#include "vectors.h"
+#include "floats.h"     // IWYU pragma: export
+#include "matrix.h"     // IWYU pragma: export
+#include "quaternion.h" // IWYU pragma: export
+#include "transform.h"  // IWYU pragma: export
+#include "vectors.h"    // IWYU pragma: export
 
 namespace wak
 {
@@ -21,13 +21,37 @@ WAK_CPU_GPU constexpr inline T Sqr(T v)
 
 WAK_CPU_GPU inline Float SafeSqrt(Float x)
 {
-    return ::sqrt(::fmax(Float(0), x));
+    return std::sqrt(std::max<Float>(0, x));
 }
 
 template <typename T>
 WAK_CPU_GPU constexpr inline T Abs(T a)
 {
     return a > T(0) ? a : -a;
+}
+
+template <typename T>
+WAK_CPU_GPU constexpr inline T Min(T a)
+{
+    return a;
+}
+
+template <typename T, typename U, typename... Args>
+WAK_CPU_GPU constexpr inline auto Min(T a, U b, Args... args)
+{
+    return Min(a < b ? a : b, args...);
+}
+
+template <typename T>
+WAK_CPU_GPU constexpr inline T Max(T a)
+{
+    return a;
+}
+
+template <typename T, typename U, typename... Args>
+WAK_CPU_GPU constexpr inline auto Max(T a, U b, Args... args)
+{
+    return Max(a > b ? a : b, args...);
 }
 
 template <typename T>
@@ -62,26 +86,58 @@ WAK_CPU_GPU inline V<T> Normalize(const V<T>& v)
 template <template <typename> class V, typename T>
 WAK_CPU_GPU inline V<T> NormalizeSafe(const V<T>& v)
 {
-    T length = v.Length();
+    T length = Length(v);
     if (length < std::numeric_limits<T>::epsilon())
     {
-        return T::zero;
+        return V<T>::zero;
     }
 
     T inv_length = T(1) / length;
     return v * inv_length;
 }
 
-template <typename T>
-WAK_CPU_GPU constexpr inline T Lerp(const T& start, const T& end, Float t)
+WAK_CPU_GPU constexpr inline Float SmoothStep01(Float t)
+{
+    t = Clamp(t, 0, 1);
+    return t * t * (3 - 2 * t);
+}
+
+WAK_CPU_GPU constexpr inline Float SmoothStep(Float a, Float b, Float x)
+{
+    if (a == b)
+    {
+        return (x < a) ? Float(0) : Float(1);
+    }
+
+    return SmoothStep01((x - a) / (b - a));
+}
+
+WAK_CPU_GPU constexpr inline Float SmootherStep01(Float t)
+{
+    t = Clamp(t, 0, 1);
+    return t * t * t * (t * (t * 6 - 15) + 10);
+}
+
+WAK_CPU_GPU constexpr inline Float SmootherStep(Float a, Float b, Float x)
+{
+    if (a == b)
+    {
+        return (x < a) ? Float(0) : Float(1);
+    }
+
+    return SmootherStep01((x - a) / (b - a));
+}
+
+template <typename V, typename T>
+WAK_CPU_GPU constexpr inline V Lerp(const V& start, const V& end, T t)
 {
     return start * (T(1) - t) + end * t;
 }
 
 template <typename T>
-WAK_CPU_GPU inline T Slerp(const T& start, const T& end, Float t)
+WAK_CPU_GPU constexpr inline T Slerp(const T& start, const T& end, Float t)
 {
-    Float dot = Clamp(Dot(start, end), Float(-1), Float(1));
+    Float dot = Clamp(Dot(start, end), -1.0f, 1.0f);
     Float angle = std::acos(dot) * t;
 
     T rv = end - start * dot;
@@ -120,6 +176,27 @@ WAK_CPU_GPU constexpr inline int32 FindInterval(int32 size, const Predicate& pre
         }
     }
     return Clamp(first - 1, 0, size - 2);
+}
+
+WAK_CPU_GPU constexpr inline float NormalizeAngle(float angle)
+{
+    if (angle >= -pi && angle <= pi)
+    {
+        return angle;
+    }
+
+    angle = std::fmod(angle, two_pi);
+
+    if (angle > pi)
+    {
+        angle -= two_pi;
+    }
+    else if (angle < -pi)
+    {
+        angle += two_pi;
+    }
+
+    return angle;
 }
 
 } // namespace wak

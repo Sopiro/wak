@@ -30,6 +30,13 @@ using Vec4i = Vector4<int32>;
 using Vec4 = Vec4f;
 
 template <typename T>
+inline T Length(const Vector2<T>& v);
+template <typename T>
+inline T Length(const Vector3<T>& v);
+template <typename T>
+inline T Length(const Vector4<T>& v);
+
+template <typename T>
 struct Vector2 : public Tuple2<Vector2, T>
 {
     using Tuple2<Vector2, T>::x;
@@ -55,13 +62,15 @@ struct Vector2 : public Tuple2<Vector2, T>
     {
     }
 
-    WAK_CPU_GPU void Negate()
+    WAK_CPU_GPU
+    void Negate()
     {
         x = -x;
         y = -y;
     }
 
-    WAK_CPU_GPU T Normalize()
+    WAK_CPU_GPU
+    T Normalize()
     {
         T length = Length(*this);
         if (length < std::numeric_limits<T>::epsilon())
@@ -115,14 +124,16 @@ struct Vector3 : public Tuple3<Vector3, T>
     {
     }
 
-    WAK_CPU_GPU void Negate()
+    WAK_CPU_GPU
+    void Negate()
     {
         x = -x;
         y = -y;
         z = -z;
     }
 
-    WAK_CPU_GPU T Normalize()
+    WAK_CPU_GPU
+    T Normalize()
     {
         T length = Length(*this);
         if (length < std::numeric_limits<T>::epsilon())
@@ -178,7 +189,8 @@ struct Vector4 : public Tuple4<Vector4, T>
     {
     }
 
-    WAK_CPU_GPU void Negate()
+    WAK_CPU_GPU
+    void Negate()
     {
         x = -x;
         y = -y;
@@ -186,7 +198,8 @@ struct Vector4 : public Tuple4<Vector4, T>
         w = -w;
     }
 
-    WAK_CPU_GPU T Normalize()
+    WAK_CPU_GPU
+    T Normalize()
     {
         T length = Length(*this);
         if (length < std::numeric_limits<T>::epsilon())
@@ -212,6 +225,12 @@ const inline Vector4<T> Vector4<T>::zero = { T(0), T(0), T(0), T(0) };
 // Vector2 inline functions begin
 
 template <typename T>
+WAK_CPU_GPU constexpr inline Vector2<T> Abs(const Vector2<T>& v)
+{
+    return Vector2<T>(std::abs(v.x), std::abs(v.y));
+}
+
+template <typename T>
 WAK_CPU_GPU constexpr inline Vector2<T> Min(const Vector2<T>& a, const Vector2<T>& b)
 {
     return Vector2<T>(std::min(a.x, b.x), std::min(a.y, b.y));
@@ -221,6 +240,12 @@ template <typename T>
 WAK_CPU_GPU constexpr inline Vector2<T> Max(const Vector2<T>& a, const Vector2<T>& b)
 {
     return Vector2<T>(std::max(a.x, b.x), std::max(a.y, b.y));
+}
+
+template <typename T>
+WAK_CPU_GPU constexpr inline Vector2<T> Clamp(const Vector2<T>& a, const Vector2<T>& min, const Vector2<T>& max)
+{
+    return Vector2<T>(std::clamp(a.x, min.x, max.x), std::clamp(a.y, min.y, max.y));
 }
 
 template <typename T>
@@ -342,6 +367,12 @@ WAK_CPU_GPU inline T Dist(const Vector2<T>& a, const Vector2<T>& b)
 // Vector3 inline functions begin
 
 template <typename T>
+WAK_CPU_GPU constexpr inline Vector3<T> Abs(const Vector3<T>& v)
+{
+    return Vector3<T>(std::abs(v.x), std::abs(v.y), std::abs(v.z));
+}
+
+template <typename T>
 WAK_CPU_GPU constexpr inline Vector3<T> Min(const Vector3<T>& a, const Vector3<T>& b)
 {
     return Vector3<T>(std::min(a.x, b.x), std::min(a.y, b.y), std::min(a.z, b.z));
@@ -354,6 +385,12 @@ WAK_CPU_GPU constexpr inline Vector3<T> Max(const Vector3<T>& a, const Vector3<T
 }
 
 template <typename T>
+WAK_CPU_GPU constexpr inline Vector3<T> Clamp(const Vector3<T>& a, const Vector3<T>& min, const Vector3<T>& max)
+{
+    return Vector3<T>(std::clamp(a.x, min.x, max.x), std::clamp(a.y, min.y, max.y), std::clamp(a.z, min.z, max.z));
+}
+
+template <typename T>
 WAK_CPU_GPU constexpr inline T Dot(const Vector3<T>& a, const Vector3<T>& b)
 {
     return a.x * b.x + a.y * b.y + a.z * b.z;
@@ -363,6 +400,12 @@ template <typename T>
 WAK_CPU_GPU constexpr inline Vector3<T> Cross(const Vector3<T>& a, const Vector3<T>& b)
 {
     return Vector3<T>(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
+}
+
+template <typename T>
+WAK_CPU_GPU constexpr inline Vector3<T> AbsCross(const Vector3<T>& a, const Vector3<T>& b)
+{
+    return Vector3<T>(a.y * b.z + a.z * b.y, a.z * b.x + a.x * b.z, a.x * b.y + a.y * b.x);
 }
 
 template <typename T>
@@ -466,6 +509,12 @@ WAK_CPU_GPU inline T Dist(const Vector3<T>& a, const Vector3<T>& b)
 // Vector4 inline functions begin
 
 template <typename T>
+WAK_CPU_GPU constexpr inline Vector4<T> Abs(const Vector4<T>& v)
+{
+    return Vector4<T>(std::abs(v.x), std::abs(v.y), std::abs(v.z), std::abs(v.w));
+}
+
+template <typename T>
 WAK_CPU_GPU constexpr inline Vector4<T> Min(const Vector4<T>& a, const Vector4<T>& b)
 {
     return Vector4<T>(std::min(a.x, b.x), std::min(a.y, b.y), std::min(a.z, b.z), std::min(a.w, b.w));
@@ -475,6 +524,14 @@ template <typename T>
 WAK_CPU_GPU constexpr inline Vector4<T> Max(const Vector4<T>& a, const Vector4<T>& b)
 {
     return Vector4<T>(std::max(a.x, b.x), std::max(a.y, b.y), std::max(a.z, b.z), std::max(a.w, b.w));
+}
+
+template <typename T>
+WAK_CPU_GPU constexpr inline Vector4<T> Clamp(const Vector4<T>& a, const Vector4<T>& min, const Vector4<T>& max)
+{
+    return Vector4<T>(
+        std::clamp(a.x, min.x, max.x), std::clamp(a.y, min.y, max.y), std::clamp(a.z, min.z, max.z), std::clamp(a.w, min.w, max.w)
+    );
 }
 
 template <typename T>

@@ -6,13 +6,28 @@
 namespace wak
 {
 
+inline Float Length(const Quat& q);
+inline constexpr Quat operator*(const Quat& q, Float s);
+inline constexpr Quat operator*(Float s, const Quat& q);
+
 struct Quat
 {
+    Float x, y, z, w;
+
     constexpr Quat() = default;
 
     WAK_CPU_GPU
     constexpr Quat(Identity)
         : Quat(1)
+    {
+    }
+
+    WAK_CPU_GPU
+    constexpr Quat(Vec3 v, Float w)
+        : x{ v.x }
+        , y{ v.y }
+        , z{ v.z }
+        , w{ w }
     {
     }
 
@@ -99,9 +114,63 @@ struct Quat
     }
 
     WAK_CPU_GPU
-    constexpr Quat operator*(Float s) const
+    constexpr Quat& operator+=(Quat q)
     {
-        return Quat(x * s, y * s, z * s, w * s);
+        x += q.x;
+        y += q.y;
+        z += q.z;
+        w += q.w;
+        return *this;
+    }
+
+    WAK_CPU_GPU
+    constexpr Quat& operator-=(Quat q)
+    {
+        x -= q.x;
+        y -= q.y;
+        z -= q.z;
+        w -= q.w;
+        return *this;
+    }
+
+    WAK_CPU_GPU
+    constexpr Quat& operator*=(Float s)
+    {
+        x *= s;
+        y *= s;
+        z *= s;
+        w *= s;
+        return *this;
+    }
+
+    WAK_CPU_GPU
+    constexpr Quat& operator/=(Float s)
+    {
+        WakAssert(s != 0);
+        Float invS = 1 / s;
+        x *= invS;
+        y *= invS;
+        z *= invS;
+        w *= invS;
+        return *this;
+    }
+
+    WAK_CPU_GPU
+    Float Normalize()
+    {
+        Float length = Length(*this);
+        if (length < std::numeric_limits<Float>::epsilon())
+        {
+            return Float(0);
+        }
+
+        Float invLength = Float(1) / length;
+        x *= invLength;
+        y *= invLength;
+        z *= invLength;
+        w *= invLength;
+
+        return length;
     }
 
     WAK_CPU_GPU
@@ -111,33 +180,12 @@ struct Quat
     }
 
     WAK_CPU_GPU
-    constexpr Float Length2() const
+    constexpr void SetIdentity()
     {
-        return x * x + y * y + z * z + w * w;
-    }
-
-    WAK_CPU_GPU
-    Float Length() const
-    {
-        return std::sqrt(Length2());
-    }
-
-    WAK_CPU_GPU
-    Float Normalize()
-    {
-        Float length = Length();
-        if (length < epsilon)
-        {
-            return 0;
-        }
-
-        Float invLength = 1 / length;
-        x *= invLength;
-        y *= invLength;
-        z *= invLength;
-        w *= invLength;
-
-        return length;
+        x = 0;
+        y = 0;
+        z = 0;
+        w = 1;
     }
 
     WAK_CPU_GPU
@@ -163,10 +211,11 @@ struct Quat
 
         Float dot2 = (x * vx + y * vy + z * vz);
 
-        return Vec3(
-            (vx * w2 + (y * vz - z * vy) * w + x * dot2), (vy * w2 + (z * vx - x * vz) * w + y * dot2),
-            (vz * w2 + (x * vy - y * vx) * w + z * dot2)
-        );
+        return Vec3{
+            vx * w2 + (y * vz - z * vy) * w + x * dot2,
+            vy * w2 + (z * vx - x * vz) * w + y * dot2,
+            vz * w2 + (x * vy - y * vx) * w + z * dot2,
+        };
     }
 
     WAK_CPU_GPU
@@ -179,19 +228,11 @@ struct Quat
 
         Float dot2 = (x * vx + y * vy + z * vz);
 
-        return Vec3(
-            (vx * w2 - (y * vz - z * vy) * w + x * dot2), (vy * w2 - (z * vx - x * vz) * w + y * dot2),
-            (vz * w2 - (x * vy - y * vx) * w + z * dot2)
-        );
-    }
-
-    WAK_CPU_GPU
-    constexpr void SetIdentity()
-    {
-        x = 0;
-        y = 0;
-        z = 0;
-        w = 1;
+        return Vec3{
+            vx * w2 - (y * vz - z * vy) * w + x * dot2,
+            vy * w2 - (z * vx - x * vz) * w + y * dot2,
+            vz * w2 - (x * vy - y * vx) * w + z * dot2,
+        };
     }
 
     // Computes rotation of x-axis
@@ -253,14 +294,14 @@ struct Quat
     }
 
     WAK_CPU_GPU
-    static Quat FromEuler(const Vec3& euler_angles)
+    static Quat FromEuler(Float x, Float y, Float z)
     {
-        Float cr = std::cos(euler_angles.x * 0.5f);
-        Float sr = std::sin(euler_angles.x * 0.5f);
-        Float cp = std::cos(euler_angles.y * 0.5f);
-        Float sp = std::sin(euler_angles.y * 0.5f);
-        Float cy = std::cos(euler_angles.z * 0.5f);
-        Float sy = std::sin(euler_angles.z * 0.5f);
+        Float cr = std::cos(x * 0.5f);
+        Float sr = std::sin(x * 0.5f);
+        Float cp = std::cos(y * 0.5f);
+        Float sp = std::sin(y * 0.5f);
+        Float cy = std::cos(z * 0.5f);
+        Float sy = std::sin(z * 0.5f);
 
         Quat q;
         q.w = cr * cp * cy + sr * sp * sy;
@@ -271,19 +312,33 @@ struct Quat
         return q;
     }
 
-    std::string ToString() const
+    WAK_CPU_GPU
+    static Quat FromEuler(const Vec3& eulerAngles)
     {
-        return FormatString("%.4f\t%.4f\t%.4f\t%.4f", x, y, z, w);
+        return FromEuler(eulerAngles.x, eulerAngles.y, eulerAngles.z);
     }
 
-    Float x, y, z, w;
+    std::string ToString() const
+    {
+        return ToEuler().ToString();
+    }
+
+    static const Quat zero;
 };
+
+const inline Quat Quat::zero{ 0.0f };
 
 // Quat inline functions begin
 
-WAK_CPU_GPU constexpr inline bool operator==(const Quat& a, const Quat& b)
+// Quaternion multiplication
+WAK_CPU_GPU constexpr inline Quat operator*(const Quat& a, const Quat& b)
 {
-    return a.x == b.x && a.y == b.y && a.z == b.z && a.w == b.w;
+    return Quat{
+        a.w * b.x + b.w * a.x + a.y * b.z - b.y * a.z,
+        a.w * b.y + b.w * a.y + a.z * b.x - b.z * a.x,
+        a.w * b.z + b.w * a.z + a.x * b.y - b.x * a.y,
+        a.w * b.w - a.x * b.x - a.y * b.y - a.z * b.z,
+    };
 }
 
 WAK_CPU_GPU constexpr inline Float Dot(const Quat& a, const Quat& b)
@@ -291,25 +346,92 @@ WAK_CPU_GPU constexpr inline Float Dot(const Quat& a, const Quat& b)
     return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
 
-// Quaternion multiplication
-WAK_CPU_GPU constexpr inline Quat operator*(const Quat& a, const Quat& b)
-{
-    // clang-format off
-    return Quat(a.w * b.x + b.w * a.x + a.y * b.z - b.y * a.z,
-                a.w * b.y + b.w * a.y + a.z * b.x - b.z * a.x,
-                a.w * b.z + b.w * a.z + a.x * b.y - b.x * a.y,
-                a.w * b.w - a.x * b.x - a.y * b.y - a.z * b.z);
-    // clang-format on
-}
-
 WAK_CPU_GPU constexpr inline Quat operator+(const Quat& a, const Quat& b)
 {
     return Quat(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
 }
 
+WAK_CPU_GPU constexpr inline Quat operator+(const Quat& a, Float b)
+{
+    return Quat(a.x + b, a.y + b, a.z + b, a.w + b);
+}
+
 WAK_CPU_GPU constexpr inline Quat operator-(const Quat& a, const Quat& b)
 {
     return Quat(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
+}
+
+WAK_CPU_GPU constexpr inline Quat operator-(const Quat& a, Float b)
+{
+    return Quat(a.x - b, a.y - b, a.z - b, a.w - b);
+}
+
+WAK_CPU_GPU constexpr inline Quat operator*(const Quat& q, Float s)
+{
+    return Quat(q.x * s, q.y * s, q.z * s, q.w * s);
+}
+
+WAK_CPU_GPU constexpr inline Quat operator*(Float s, const Quat& q)
+{
+    return Quat(q.x * s, q.y * s, q.z * s, q.w * s);
+}
+
+// WAK_CPU_GPU constexpr inline Quat operator*(const Quat& a, const Quat& b)
+// {
+//     return Quat(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w);
+// }
+
+WAK_CPU_GPU constexpr inline Quat operator/(const Quat& q, Float s)
+{
+    return Quat(q.x / s, q.y / s, q.z / s, q.w / s);
+}
+
+WAK_CPU_GPU constexpr inline Quat operator/(Float s, const Quat& q)
+{
+    return Quat(s / q.x, s / q.y, s / q.z, s / q.w);
+}
+
+WAK_CPU_GPU constexpr inline Quat operator/(const Quat& a, const Quat& b)
+{
+    return Quat(a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w);
+}
+
+WAK_CPU_GPU constexpr inline bool operator==(const Quat& a, const Quat& b)
+{
+    return a.x == b.x && a.y == b.y && a.z == b.z && a.w == b.w;
+}
+
+WAK_CPU_GPU constexpr inline bool operator!=(const Quat& a, const Quat& b)
+{
+    return a.x != b.x || a.y != b.y || a.z != b.z || a.w != b.w;
+}
+
+WAK_CPU_GPU constexpr inline Float Length2(const Quat& q)
+{
+    return q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w;
+}
+
+WAK_CPU_GPU inline Float Length(const Quat& q)
+{
+    return std::sqrt(Length2(q));
+}
+
+WAK_CPU_GPU inline Quat Normalize(const Quat& q)
+{
+    Float inv_length = Float(1) / Length(q);
+    return q * inv_length;
+}
+
+WAK_CPU_GPU inline Quat NormalizeSafe(const Quat& q)
+{
+    Float length = Length(q);
+    if (length < std::numeric_limits<Float>::epsilon())
+    {
+        return Quat::zero;
+    }
+
+    Float inv_length = Float(1) / length;
+    return q * inv_length;
 }
 
 // Compute angle between two quaternions

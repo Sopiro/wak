@@ -6,7 +6,6 @@
 
 #pragma once
 
-#include "asserts.h"
 #include "common.h"
 
 namespace wak

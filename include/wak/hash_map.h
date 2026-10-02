@@ -1,7 +1,6 @@
 #pragma once
 
-#include "asserts.h"
-#include "types.h"
+#include "common.h"
 
 namespace wak
 {

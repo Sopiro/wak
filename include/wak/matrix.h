@@ -1,6 +1,5 @@
 #pragma once
 
-#include "common.h"
 #include "vectors.h"
 
 namespace wak
@@ -110,6 +109,24 @@ struct Mat2
     }
 
     WAK_CPU_GPU
+    constexpr Float Trace() const
+    {
+        return ex.x + ey.y;
+    }
+
+    WAK_CPU_GPU
+    constexpr Float TraceInverse() const
+    {
+        Float det = ex.x * ey.y - ey.x * ex.y;
+        if (det == 0.0f)
+        {
+            return 0.0f;
+        }
+
+        return (ex.x + ey.y) / det;
+    }
+
+    WAK_CPU_GPU
     constexpr Float GetDeterminant() const
     {
         return ex.x * ey.y - ey.x * ex.y;
@@ -117,9 +134,13 @@ struct Mat2
 
     std::string ToString() const
     {
-        return FormatString("%.4f\t%.4f\n%.4f\t%.4f", ex.x, ey.x, ex.y, ey.y);
+        return std::format("{:.4f}\t{:.4f}\n{:.4f}\t{:.4f}", ex.x, ey.x, ex.y, ey.y);
     }
+
+    static const Mat2 zero;
 };
+
+const inline Mat2 Mat2::zero{ 0.0f };
 
 struct Mat3
 {
@@ -207,6 +228,14 @@ struct Mat3
     }
 
     WAK_CPU_GPU
+    constexpr Float Trace() const
+    {
+        return ex.x + ey.y + ez.z;
+    }
+
+    WAK_CPU_GPU
+    constexpr Float TraceInverse() const;
+
     constexpr Mat3 GetInverse() const;
 
     WAK_CPU_GPU Mat3 Scale(const Vec2& scale) const;
@@ -215,11 +244,16 @@ struct Mat3
 
     std::string ToString() const
     {
-        return FormatString(
-            "%.4f\t%.4f\t%.4f\n%.4f\t%.4f\t%.4f\n%.4f\t%.4f\t%.4f", ex.x, ey.x, ez.x, ex.y, ey.y, ez.y, ex.z, ey.z, ez.z
+        return std::format(
+            "{:.4f}\t{:.4f}\t{:.4f}\n{:.4f}\t{:.4f}\t{:.4f}\n{:.4f}\t{:.4f}\t{:.4f}\n", ex.x, ey.x, ez.x, ex.y, ey.y, ez.y, ex.z,
+            ey.z, ez.z
         );
     }
+
+    static const Mat3 zero;
 };
+
+const inline Mat3 Mat3::zero{ 0.0f };
 
 struct Mat4
 {
@@ -322,23 +356,38 @@ struct Mat4
     }
 
     WAK_CPU_GPU
+    constexpr Float Trace() const
+    {
+        return ex.x + ey.y + ez.z + ew.w;
+    }
+
+    WAK_CPU_GPU
+    constexpr Float TraceInverse() const;
+
+    WAK_CPU_GPU
     constexpr Mat4 GetInverse() const;
 
     WAK_CPU_GPU Mat4 Scale(const Vec3& scale) const;
-    WAK_CPU_GPU Mat4 Rotate(const Vec3& euler_rotation) const;
+    WAK_CPU_GPU Mat4 Rotate(const Vec3& eulerRotation) const;
     WAK_CPU_GPU Mat4 Translate(const Vec3& translation) const;
 
-    WAK_CPU_GPU static Mat4 Orth(Float left, Float right, Float bottom, Float top, Float z_near, Float z_far);
-    WAK_CPU_GPU static Mat4 Perspective(Float vertical_fov, Float aspect_ratio, Float z_near, Float z_far);
+    WAK_CPU_GPU static Mat4 Orth(Float left, Float right, Float bottom, Float top, Float zNear, Float zFar);
+    WAK_CPU_GPU static Mat4 Perspective(Float verticalFov, Float aspectRatio, Float zNear, Float zFar);
+    WAK_CPU_GPU static Mat4 LookAt(const Vec3& position, const Vec3& target, const Vec3& up);
 
     std::string ToString() const
     {
-        return FormatString(
-            "%.4f\t%.4f\t%.4f\t%.4f\n%.4f\t%.4f\t%.4f\t%.4f\n%.4f\t%.4f\t%.4f\t%.4f\n%.4f\t%.4f\t%.4f\t%.4f", ex.x, ey.x, ez.x,
-            ew.x, ex.y, ey.y, ez.y, ew.y, ex.z, ey.z, ez.z, ew.z, ex.w, ey.w, ez.w, ew.w
+        return std::format(
+            "{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}\n{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}\n{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}\n{:."
+            "4f}\t{:.4f}\t{:.4f}\t{:.4f}\n",
+            ex.x, ey.x, ez.x, ew.x, ex.y, ey.y, ez.y, ew.y, ex.z, ey.z, ez.z, ew.z, ex.w, ey.w, ez.w, ew.w
         );
     }
+
+    static const Mat4 zero;
 };
+
+const inline Mat4 Mat4::zero{ 0.0f };
 
 // Mat2 inline functions begin
 
@@ -402,6 +451,11 @@ WAK_CPU_GPU constexpr inline Vec3 Mul(const Mat3& m, const Vec3& v)
     };
 }
 
+WAK_CPU_GPU constexpr inline Vec3 operator*(const Mat3& m, const Vec3& v)
+{
+    return Mul(m, v);
+}
+
 // M^T * V
 WAK_CPU_GPU constexpr inline Vec3 MulT(const Mat3& m, const Vec3& v)
 {
@@ -412,6 +466,11 @@ WAK_CPU_GPU constexpr inline Vec3 MulT(const Mat3& m, const Vec3& v)
 WAK_CPU_GPU constexpr inline Mat3 Mul(const Mat3& a, const Mat3& b)
 {
     return Mat3(Mul(a, b.ex), Mul(a, b.ey), Mul(a, b.ez));
+}
+
+WAK_CPU_GPU constexpr inline Mat3 operator*(const Mat3& a, const Mat3& b)
+{
+    return Mul(a, b);
 }
 
 // A^T * B
@@ -446,6 +505,21 @@ WAK_CPU_GPU constexpr inline Mat3 Mat3::GetInverse() const
     t.ez.z = (ex.x * ey.y - ex.y * ey.x) * det;
 
     return t;
+}
+
+WAK_CPU_GPU constexpr inline Float Mat3::TraceInverse() const
+{
+    Float cxx = ey.y * ez.z - ey.z * ez.y;
+    Float cyy = ex.x * ez.z - ex.z * ez.x;
+    Float czz = ex.x * ey.y - ex.y * ey.x;
+
+    Float det = ex.x * cxx - ey.x * (ex.y * ez.z - ex.z * ez.y) + ez.x * (ex.y * ey.z - ex.z * ey.y);
+    if (det == 0.0f)
+    {
+        return 0.0f;
+    }
+
+    return (cxx + cyy + czz) / det;
 }
 
 WAK_CPU_GPU inline Mat3 Mat3::Scale(const Vec2& scale) const
@@ -509,6 +583,11 @@ WAK_CPU_GPU constexpr inline Vec4 Mul(const Mat4& m, const Vec4& v)
     };
 }
 
+WAK_CPU_GPU constexpr inline Vec4 operator*(const Mat4& m, const Vec4& v)
+{
+    return Mul(m, v);
+}
+
 // M^T * V
 WAK_CPU_GPU constexpr inline Vec4 MulT(const Mat4& m, const Vec4& v)
 {
@@ -519,6 +598,11 @@ WAK_CPU_GPU constexpr inline Vec4 MulT(const Mat4& m, const Vec4& v)
 WAK_CPU_GPU constexpr inline Mat4 Mul(const Mat4& a, const Mat4& b)
 {
     return Mat4(Mul(a, b.ex), Mul(a, b.ey), Mul(a, b.ez), Mul(a, b.ew));
+}
+
+WAK_CPU_GPU constexpr inline Mat4 operator*(const Mat4& a, const Mat4& b)
+{
+    return Mul(a, b);
 }
 
 // A^T * B
@@ -581,6 +665,37 @@ WAK_CPU_GPU constexpr inline Mat4 Mat4::GetInverse() const
     t.ew.w = det * (ex.x * a1212 - ex.y * a0212 + ex.z * a0112);
 
     return t;
+}
+
+WAK_CPU_GPU constexpr inline Float Mat4::TraceInverse() const
+{
+    Float a2323 = ez.z * ew.w - ez.w * ew.z;
+    Float a1323 = ez.y * ew.w - ez.w * ew.y;
+    Float a1223 = ez.y * ew.z - ez.z * ew.y;
+    Float a0323 = ez.x * ew.w - ez.w * ew.x;
+    Float a0223 = ez.x * ew.z - ez.z * ew.x;
+    Float a0123 = ez.x * ew.y - ez.y * ew.x;
+    Float a1313 = ey.y * ew.w - ey.w * ew.y;
+    Float a1212 = ey.y * ez.z - ey.z * ez.y;
+    Float a0313 = ey.x * ew.w - ey.w * ew.x;
+    Float a0212 = ey.x * ez.z - ey.z * ez.x;
+    Float a0113 = ey.x * ew.y - ey.y * ew.x;
+    Float a0112 = ey.x * ez.y - ey.y * ez.x;
+
+    Float det = ex.x * (ey.y * a2323 - ey.z * a1323 + ey.w * a1223) - ex.y * (ey.x * a2323 - ey.z * a0323 + ey.w * a0223) +
+                ex.z * (ey.x * a1323 - ey.y * a0323 + ey.w * a0123) - ex.w * (ey.x * a1223 - ey.y * a0223 + ey.z * a0123);
+
+    if (det == 0.0f)
+    {
+        return 0.0f;
+    }
+
+    Float cxx = ey.y * a2323 - ey.z * a1323 + ey.w * a1223;
+    Float cyy = ex.x * a2323 - ex.z * a0323 + ex.w * a0223;
+    Float czz = ex.x * a1313 - ex.y * a0313 + ex.w * a0113;
+    Float cww = ex.x * a1212 - ex.y * a0212 + ex.z * a0112;
+
+    return (cxx + cyy + czz + cww) / det;
 }
 
 WAK_CPU_GPU inline Mat4 Mat4::Scale(const Vec3& s) const
@@ -677,6 +792,31 @@ WAK_CPU_GPU inline Mat4 Mat4::Perspective(Float vertical_fov, Float aspect_ratio
     return t;
 }
 
+WAK_CPU_GPU inline Mat4 Mat4::LookAt(const Vec3& position, const Vec3& target, const Vec3& up)
+{
+    Vec3 forward = target - position;
+    forward.Normalize();
+    Vec3 right = Cross(forward, up);
+    right.Normalize();
+    const Vec3 cameraUp = Cross(right, forward);
+
+    return Mat4{
+        Vec4{ right.x, cameraUp.x, -forward.x, 0 },
+        Vec4{ right.y, cameraUp.y, -forward.y, 0 },
+        Vec4{ right.z, cameraUp.z, -forward.z, 0 },
+        Vec4{ -Dot(right, position), -Dot(cameraUp, position), Dot(forward, position), 1 },
+    };
+}
+
 // Mat4 functions end
+
+WAK_CPU_GPU inline Mat3 Skew(const Vec3& v)
+{
+    return Mat3{
+        Vec3{ 0.0f, v.z, -v.y },
+        Vec3{ -v.z, 0.0f, v.x },
+        Vec3{ v.y, -v.x, 0.0f },
+    };
+}
 
 } // namespace wak

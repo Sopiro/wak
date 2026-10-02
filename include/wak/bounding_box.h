@@ -162,7 +162,7 @@ WAK_CPU_GPU inline bool BoundingBox2<T>::TestRay(const Ray& ray, Float t_min, Fl
 
         if (invD < 0)
         {
-            Swap(t0, t1);
+            std::swap(t0, t1);
         }
 
         t_min = t0 > t_min ? t0 : t_min;
@@ -409,7 +409,7 @@ WAK_CPU_GPU inline bool BoundingBox3<T>::TestRay(const Ray& ray, Float t_min, Fl
 
         if (invD < 0)
         {
-            Swap(t0, t1);
+            std::swap(t0, t1);
         }
 
         t_min = t0 > t_min ? t0 : t_min;

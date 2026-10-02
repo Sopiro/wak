@@ -1,8 +1,6 @@
 #pragma once
 
-#include "asserts.h"
 #include "floats.h"
-#include "format.h"
 #include "types.h"
 
 namespace wak
@@ -55,7 +53,8 @@ struct Tuple2
         return x != c.x || y != c.y;
     }
 
-    WAK_CPU_GPU constexpr Child<T> operator-() const
+    WAK_CPU_GPU
+    constexpr Child<T> operator-() const
     {
         return { -x, -y };
     }
@@ -83,7 +82,7 @@ struct Tuple2
     template <typename U>
     WAK_CPU_GPU constexpr auto operator/(U d) const -> Child<decltype(T{} / U{})>
     {
-        WakAssert(d != 0 && !wak::IsNullish(d));
+        WakAssert(!wak::IsNullish(d) && d != 0);
         return { x / d, y / d };
     }
 
@@ -117,29 +116,9 @@ struct Tuple2
     template <typename U>
     WAK_CPU_GPU constexpr Child<T>& operator/=(U d)
     {
-        WakAssert(d != 0);
-        WakAssert(!wak::IsNullish(d));
+        WakAssert(!wak::IsNullish(d) && d != 0);
         x /= d;
         y /= d;
-        return static_cast<Child<T>&>(*this);
-    }
-
-    template <typename U>
-    WAK_CPU_GPU constexpr Child<T>& operator*=(Child<U> s)
-    {
-        WakAssert(!wak::IsNullish(s));
-        x *= s.x;
-        y *= s.y;
-        return static_cast<Child<T>&>(*this);
-    }
-
-    template <typename U>
-    WAK_CPU_GPU constexpr Child<T>& operator/=(Child<U> d)
-    {
-        WakAssert(d != 0);
-        WakAssert(!wak::IsNullish(d));
-        x /= d.x;
-        y /= d.y;
         return static_cast<Child<T>&>(*this);
     }
 
@@ -159,7 +138,7 @@ struct Tuple2
 
     std::string ToString() const
     {
-        return FormatString("%.4f\t%.4f", x, y);
+        return std::format("{:.4f}\t{:.4f}", float(x), float(y));
     }
 
     T x{}, y{};
@@ -242,7 +221,7 @@ struct Tuple3
     template <typename U>
     WAK_CPU_GPU constexpr auto operator/(U d) const -> Child<decltype(T{} / U{})>
     {
-        WakAssert(d != 0);
+        WakAssert(!wak::IsNullish(d) && d != 0);
         return { x / d, y / d, z / d };
     }
 
@@ -279,30 +258,10 @@ struct Tuple3
     template <typename U>
     WAK_CPU_GPU constexpr Child<T>& operator/=(U d)
     {
-        WakAssert(d != 0);
+        WakAssert(!wak::IsNullish(d) && d != 0);
         x /= d;
         y /= d;
         z /= d;
-        return static_cast<Child<T>&>(*this);
-    }
-
-    template <typename U>
-    WAK_CPU_GPU constexpr Child<T>& operator*=(Child<U> s)
-    {
-        WakAssert(!wak::IsNullish(s));
-        x *= s.x;
-        y *= s.y;
-        z *= s.z;
-        return static_cast<Child<T>&>(*this);
-    }
-
-    template <typename U>
-    WAK_CPU_GPU constexpr Child<T>& operator/=(Child<U> d)
-    {
-        WakAssert(d != 0);
-        x /= d.x;
-        y /= d.y;
-        z /= d.z;
         return static_cast<Child<T>&>(*this);
     }
 
@@ -324,7 +283,7 @@ struct Tuple3
 
     std::string ToString() const
     {
-        return FormatString("%.4f\t%.4f\t%.4f", x, y, z);
+        return std::format("{:.4f}\t{:.4f}\t{:.4f}", float(x), float(y), float(z));
     }
 
     T x{}, y{}, z{};
@@ -396,7 +355,7 @@ struct Tuple4
     WAK_CPU_GPU constexpr auto operator-(Child<U> c) const -> Child<decltype(T{} - U{})>
     {
         WakAssert(!c.IsNullish());
-        return { x - c.x, y - c.y, z - c.z, z - c.w };
+        return { x - c.x, y - c.y, z - c.z, w - c.w };
     }
 
     template <typename U>
@@ -408,7 +367,7 @@ struct Tuple4
     template <typename U>
     WAK_CPU_GPU constexpr auto operator/(U d) const -> Child<decltype(T{} / U{})>
     {
-        WakAssert(d != 0);
+        WakAssert(!wak::IsNullish(d) && d != 0);
         return { x / d, y / d, z / d, w / d };
     }
 
@@ -448,33 +407,11 @@ struct Tuple4
     template <typename U>
     WAK_CPU_GPU constexpr Child<T>& operator/=(U d)
     {
-        WakAssert(d != 0);
+        WakAssert(!wak::IsNullish(d) && d != 0);
         x /= d;
         y /= d;
         z /= d;
         w /= d;
-        return static_cast<Child<T>&>(*this);
-    }
-
-    template <typename U>
-    WAK_CPU_GPU constexpr Child<T>& operator*=(Child<U> s)
-    {
-        WakAssert(!wak::IsNullish(s));
-        x *= s.x;
-        y *= s.y;
-        z *= s.z;
-        w *= s.w;
-        return static_cast<Child<T>&>(*this);
-    }
-
-    template <typename U>
-    WAK_CPU_GPU constexpr Child<T>& operator/=(Child<U> d)
-    {
-        WakAssert(d != 0);
-        x /= d.x;
-        y /= d.y;
-        z /= d.z;
-        w /= d.w;
         return static_cast<Child<T>&>(*this);
     }
 
@@ -498,7 +435,7 @@ struct Tuple4
 
     std::string ToString() const
     {
-        return FormatString("%.4f\t%.4f\t%.4f\t%.4f", x, y, z, w);
+        return std::format("{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}", float(x), float(y), float(z), float(w));
     }
 
     T x{}, y{}, z{}, w{};
